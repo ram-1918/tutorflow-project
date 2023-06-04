@@ -122,7 +122,7 @@ class ListAnswersAPI(generics.ListCreateAPIView):
     def get_queryset(self):
         if self.request.query_params:
             qid = self.request.query_params.get('queid')
-            print("listAnswersAPI: ", qid)
+            # print("listAnswersAPI: ", qid)
             return AnswersModel.objects.filter(question_id=qid) # super().get_queryset()
         return AnswersModel.objects.all()
 
