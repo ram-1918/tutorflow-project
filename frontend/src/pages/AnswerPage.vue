@@ -10,7 +10,6 @@
                 </div>
                 <span style="font-size: small; font-weight: 300;">Date Posted: {{ date }} {{ time }} ({{ days }} days ago)</span>
             </div> 
-            {{ ansDetails }}
             <p>Total Answers: {{ ansDetails.length }}</p>
             <div v-if="ansDetails">
                 <div id="answer-section" v-for="ans of ansDetails" :key="ans.id">

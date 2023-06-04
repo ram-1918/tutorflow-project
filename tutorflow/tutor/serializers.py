@@ -20,9 +20,9 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'firstname', 'lastname', 'email', 'is_anon', 'is_active', 'is_superuser']
     
     def validate_password(self, value):
-        print("Plain: ", value)
+        # print("Plain: ", value)
         hpass = get_hashed_password(value)
-        print("Hased: ", hpass)
+        # print("Hased: ", hpass)
         return hpass
                 
     def validate_email(self, value):
@@ -46,14 +46,14 @@ class LoginSerializer(serializers.Serializer):
     def validate(self, request):
         email = request.get('email')
         password = request.get('password')
-        print(email, password, '++++++++++++++++++++++__________________')
+        # print(email, password, '')
 
         if email and password:
             user = Users.objects.filter(email = email).first()
             if not user:
                 msg = 'Access denied: wrong username or password.'
                 raise serializers.ValidationError(msg, code='authorization')
-            print(email, password, user, '++++++++++++++++++++++__________________')
+            # print(email, password, user, '++++++++++++++++++++++__________________')
 
         else:
             msg = 'Both "username" and "password" are required.'

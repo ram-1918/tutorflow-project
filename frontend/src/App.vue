@@ -23,14 +23,14 @@ export default {
     toggleMode(){return {"dark-body":this.$store.state.theme,"light-body":this.$store.state.theme!=false }}
   },
   beforeCreate(){
-    // const user = localStorage.getItem("user", null)
-    // if (!user){
-    //   axios.post('http://18.224.55.89:8000/api/anon-login/', {"time": Date.now()}, this.$store.state.authorization)
-    //   .then((response) => {
-    //     console.log("Anon user Token Generated ", response.data);
-    //     localStorage.setItem('user',JSON.stringify(response.data));
-    //   })
-    // }
+    const user = localStorage.getItem("user", null)
+    if (!user){
+      axios.post('http://18.224.55.89:8000/api/anon-login/', {"time": Date.now()}, this.$store.state.authorization)
+      .then((response) => {
+        console.log("Anon user Token Generated ", response.data);
+        localStorage.setItem('user',JSON.stringify(response.data));
+      })
+    }
   },
   created(){
     this.$store.dispatch('loadQuestions');
