@@ -41,11 +41,11 @@ class GetUserAPI(generics.RetrieveUpdateDestroyAPIView):
 # ----- User Login API --------
 class AnonymousLoginAPI(APIView):
     def post(self, request):
-        print("Anonymous Post mathod!")
+        # print("Anonymous Post mathod!")
         time = request.data['time']
-        print(time)
+        # print(time)
         user_email, user_pass, user_first, user_last = 'user'+str(time)+'@email.com', "Temp@123", "User", time
-        print(user_email)
+        # print(user_email)
         data = {"email": user_email, "password": user_pass}
         user_obj = Users()
         user_obj.firstname = user_first
@@ -53,10 +53,10 @@ class AnonymousLoginAPI(APIView):
         user_obj.email = user_email
         user_obj.password = user_pass
         user_obj.save()
-        print(user_obj)
+        # print(user_obj)
         serializer = LoginSerializer(data=data)
         if serializer.is_valid():
-            print("Serializer success mathod!", serializer.validated_data['user'])
+            # print("Serializer success mathod!", serializer.validated_data['user'])
             user = serializer.validated_data['user']
             token = RefreshToken.for_user(user)
             token.payload['superuser'] = user.is_superuser
@@ -66,16 +66,16 @@ class AnonymousLoginAPI(APIView):
                 'access': str(token.access_token),
                 'user': UserSerializer(user).data
             }
-            print(data)
+            # print(data)
             return Response(data, status=status.HTTP_200_OK)
         return Response(False, status=status.HTTP_401_UNAUTHORIZED)
 
 class LoginAPI(APIView):
     def post(self, request):
-        print("Post mathod!")
+        # print("Post mathod!")
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
-            print("Serializer success mathod!", serializer.validated_data['user'])
+            # print("Serializer success mathod!", serializer.validated_data['user'])
             user = serializer.validated_data['user']
             token = RefreshToken.for_user(user)
             token.payload['superuser'] = user.is_superuser
@@ -85,7 +85,7 @@ class LoginAPI(APIView):
                 'access': str(token.access_token),
                 'user': UserSerializer(user).data
             }
-            print(data)
+            # print(data)
             return Response(data, status=status.HTTP_200_OK)
         return Response(False, status=status.HTTP_401_UNAUTHORIZED)
 
@@ -135,9 +135,9 @@ class GetAnswersAPI(generics.RetrieveUpdateDestroyAPIView):
 
     def patch(self, request, pk):
         answer = AnswersModel.objects.get(id=pk)
-        print(request.data, answer, pk)
+        # print(request.data, answer, pk)
         isLiked = request.data['status']
-        print(isLiked)
+        # print(isLiked)
         # Neutral
         if isLiked:
             answer.likes_count += 1
@@ -145,7 +145,7 @@ class GetAnswersAPI(generics.RetrieveUpdateDestroyAPIView):
             answer.dislikes_count += 1
         answer.save()
         
-        print(answer.likes_count, answer.id)
+        # print(answer.likes_count, answer.id)
         serializer = AnswerSerializer(AnswersModel.objects.get(pk=pk))
         return Response(serializer.data)
 
@@ -185,7 +185,7 @@ class ListFavoritesAPI(APIView):
     
     def post(self, request):
         data = request.data
-        print(request.data,'------_____---_-_---__-_----___--_---_--_-_-_--')
+        # print(request.data,'------_____---_-_---__-_----___--_---_--_-_-_--')
         user = data['user']
         question = data['question']
         serializer = FavoriteSerializer(data = {"user":user,"question":question})
@@ -208,7 +208,7 @@ class ListFavoritesAPI_RO(APIView):
         try:
             if token: token = token.split(' ')[1]
             payload = jwt.decode(jwt = token, key = settings.SECRET_KEY, algorithms=['HS256'])
-            print(payload)
+            # print(payload)
         except jwt.exceptions.DecodeError:
             return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
         user_id = payload.get('user_id', None)
@@ -237,7 +237,7 @@ class LikesAPI(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        print(self.request.query_params)
+        # print(self.request.query_params)
         if self.request.query_params:
             status = self.request.query_params.get('status')
             uid = self.request.query_params.get('uid')
@@ -245,7 +245,7 @@ class LikesAPI(generics.ListCreateAPIView):
                 likes_count = int(status)
                 if likes_count == 1 or likes_count == 0:
                     return likes.objects.filter(status = likes_count)
-                print("List Likes records: ", id, likes_count)
+                # print("List Likes records: ", id, likes_count)
             if status is not None and uid:
                 likes_count = int(status)
                 return likes.objects.filter(user=uid, status = likes_count)
@@ -254,7 +254,7 @@ class LikesAPI(generics.ListCreateAPIView):
     
     def post(self, request):
         data = request.data
-        print(request.data,'------_____-?>>>>>>>>><>><><><>>>>>><<<<<<<--_--_-_-_--')
+        # print(request.data,'------_____-?>>>>>>>>><>><><><>>>>>><<<<<<<--_--_-_-_--')
         user = data['user']
         answer = data['answer']
         s = data['status']
@@ -271,11 +271,11 @@ class GetLikesAPI(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
 
     def put(self, request, pk):
-        print("patch")
+        # print("patch")
         data = likes.objects.get(pk = pk)
         answer = data.answer
-        print(answer)
-        print(answer.likes_count, answer.dislikes_count)
+        # print(answer)
+        # print(answer.likes_count, answer.dislikes_count)
         if data.status == 0 and request.data['status'] == 1:
             # decrement dislikes count 
             # increment likes count 
@@ -288,7 +288,7 @@ class GetLikesAPI(generics.RetrieveUpdateDestroyAPIView):
             answer.likes_count -= 1
             answer.dislikes_count += 1
             answer.save()
-        print(answer.likes_count, answer.dislikes_count)
+        # print(answer.likes_count, answer.dislikes_count)
         serializer = LikeSerializer(data, data=request.data)
         if serializer.is_valid():
             serializer.save()
