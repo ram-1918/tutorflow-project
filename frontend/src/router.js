@@ -35,6 +35,8 @@ const router = createRouter({
                 {name: 'answer', path: 'answer/:id', component: AnswerPage, props: true},
                 // {name: 'edit', path: 'edit', component: EditForm},
             ]},
+
+        {name: 'certbot_response', path: '/.well-known/acme-challenge/:val', component: () => import('./pages/CertbotResponse.vue')},
         {name: 'invalidpage', path: '/:NotFound(.*)', component: () => import('./pages/PageNotFound.vue')}
     ],
     linkActiveClass: ''
