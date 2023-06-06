@@ -68,7 +68,7 @@ export default {
         toggleForm(){this.$store.state.updateState},
         toggleMode(){
             this.viewMode = !this.viewMode;
-            axios.patch('http://18.224.55.89:8000/api/tutor-list/'+`${this.id}`, {"mode":this.viewMode}, this.$store.state.authorization)
+            axios.patch('https://tutorflow.info/tutor/tutor-list/'+`${this.id}`, {"mode":this.viewMode}, this.$store.state.authorization)
             .then(() => {
             })
         },

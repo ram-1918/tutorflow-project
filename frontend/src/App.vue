@@ -25,7 +25,7 @@ export default {
   beforeCreate(){
     const user = localStorage.getItem("user", null)
     if (!user){
-      axios.post('http://18.224.55.89:8000/api/anon-login/', {"time": Date.now()}, this.$store.state.authorization)
+      axios.post('https://tutorflow.info/tutor/anon-login/', {"time": Date.now()}, this.$store.state.authorization)
       .then((response) => {
         console.log("Anon user Token Generated ", response.data);
         localStorage.setItem('user',JSON.stringify(response.data));

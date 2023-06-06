@@ -19,7 +19,8 @@ const store = createStore({
     },
     state() {
         return {
-            API_URL1: 'http://18.224.55.89:8000/api/', // development URL
+            API_URL1: 'https://tutorflow.info/tutor/', // development URL
+            // API_URL1: 'http://18.224.55.89:8000/api/', // development URL
             // API_URL1: 'http://127.0.0.1:8001/api/', // development URL
             // API_URL: 'http://tutorapi.com:8000/api/tutor-list/', // Production URL
             authorization: {auth: {username:'rbhaviri@buffalo.edu', password:'Qwerty123'}},
@@ -318,7 +319,7 @@ const store = createStore({
             if(user_data){
               var user = JSON.parse(user_data)
               // likes for user userid
-              axios.get('http://18.224.55.89:8000/api/likes/?uid='+ `${user.user.id}`+'&status='+ `${1}`, state.authorization)
+              axios.get('https://tutorflow.info/tutor/likes/?uid='+ `${user.user.id}`+'&status='+ `${1}`, state.authorization)
               .then((response) =>{
                 state.likesList = response.data;
               })
@@ -326,7 +327,7 @@ const store = createStore({
                 console.log(errors)
               })
               // Dislikes for user userid
-              axios.get('http://18.224.55.89:8000/api/likes/?uid='+ `${user.user.id}`+'&status='+ `${0}`, state.authorization)
+              axios.get('https://tutorflow.info/tutor/likes/?uid='+ `${user.user.id}`+'&status='+ `${0}`, state.authorization)
               .then((response) =>{
                 state.dislikesList = response.data;
               })

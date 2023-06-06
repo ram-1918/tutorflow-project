@@ -106,16 +106,16 @@ export default {
                 }
             }
             if(method === "post"){
-                axios.post('http://18.224.55.89:8000/api/likes/', payload, this.$store.state.authorization)
+                axios.post('https://tutorflow.info/tutor/likes/', payload, this.$store.state.authorization)
                 .then((res) => {
                     if(value === 1){
-                        axios.patch('http://18.224.55.89:8000/api/answer/'+`${id}`, {"status": 1}, this.$store.state.authorization)
+                        axios.patch('https://tutorflow.info/tutor/answer/'+`${id}`, {"status": 1}, this.$store.state.authorization)
                         .then(() => {
                             this.$store.state.likesList.push(res.data);
                             console.log(res.data)
                         })
                     }else{
-                        axios.patch('http://18.224.55.89:8000/api/answer/'+`${id}`, {"status": 0}, this.$store.state.authorization)
+                        axios.patch('https://tutorflow.info/tutor/answer/'+`${id}`, {"status": 0}, this.$store.state.authorization)
                         .then(() => {
                             this.$store.state.dislikesList.push(res.data)
                         })
@@ -123,7 +123,7 @@ export default {
                 })
             }
             else if(method === "patch"){
-                axios.put('http://18.224.55.89:8000/api/likes/'+`${eleId}`, payload, this.$store.state.authorization)
+                axios.put('https://tutorflow.info/tutor/likes/'+`${eleId}`, payload, this.$store.state.authorization)
                 .then((res) => {
                     if(value === 1){
                         this.$store.state.likesList.push(res.data)

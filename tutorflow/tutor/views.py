@@ -30,7 +30,13 @@ def check_password(plain_text_password, hashed_password):
 
 # ----- User registarion API --------
 
-class ListUsersAPI(generics.ListCreateAPIView):
+# list all users
+
+class ListAllUsersAPI(generics.ListAPIView):
+    queryset = Users.objects.all()
+    serializer_class = UserSerializer
+
+class ListUsersAPI(generics.CreateAPIView):
     queryset = Users.objects.all()
     serializer_class = UserSerializer
 

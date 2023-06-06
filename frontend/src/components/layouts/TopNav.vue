@@ -101,7 +101,7 @@ export default {
             topic: 'de',
             word: '',
             searched_data: '',
-            url: this.$store.state.API_URL
+            url: this.$store.state.API_URL1
         }
     },
 
@@ -116,7 +116,7 @@ export default {
             if(text === ''){
                 text = 'undefined'
             }
-            axios.get(this.url+'?search='+text, this.$store.state.authorization)
+            axios.get(this.url+'tutor-list/?search='+text, this.$store.state.authorization)
             .then((response) => {
                 console.log(response.data);
                 this.searched_data = response.data;
