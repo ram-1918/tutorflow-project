@@ -85,7 +85,7 @@ class LoginAPI(APIView):
             user = serializer.validated_data['user']
             token = RefreshToken.for_user(user)
             token.payload['superuser'] = user.is_superuser
-            token.payload['anon_user'] = user.is_anon
+            token.payload['anon_user'] = False
             data = {
                 'refresh': str(token),
                 'access': str(token.access_token),

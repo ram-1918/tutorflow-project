@@ -27,7 +27,7 @@ div{
     padding: 10px;
     width: fit-content;
     border-radius: 10px;
-    animation: fade 3s ease-in-out;
+    animation: fade;
     left: 36%;
     position: absolute;
 }
@@ -59,11 +59,15 @@ div{
     color: white;
 }
 @keyframes fade{
-    from {
+    0% {
         top: 10%;
         opacity: 1;
     }
-    to {
+    25% {
+        top: 11%;
+        opacity: 1;
+    }
+    100% {
         top: 0;
         opacity: 0;
     }

@@ -44,8 +44,9 @@ export default {
 }
 
 .tag{
-    background-color: rgb(209, 226, 243);
-    color: black;
+    background-color: #F1F6F9;
+    /* background-color: rgb(209, 226, 243); */
+    color: #212A3E;
     border-radius: 5px;
     border: none;
     padding: 7px;
@@ -66,7 +67,7 @@ export default {
     box-shadow: 1px 3px 4px rgba(0,0,0,0.4);
 }
 .add{
-    /* background-color: red; */
+    background-color: #F1F6F9;
     /* color: rgb(24, 57, 124); */
     outline: none;
     border: none;
@@ -86,7 +87,8 @@ export default {
     cursor: pointer;
 }
 .submit{
-    background-color: rgb(43, 88, 130);
+    background-color: #394867;
+    /* background-color: rgb(43, 88, 130); */
     color: white;
     padding: 14px 20px;
     margin: 8px 0;
@@ -100,7 +102,8 @@ export default {
 .feedback-submit{
     width:fit-content;
     border: none;
-    background-color: rgb(19, 78, 161);
+    background-color: #394867;
+    /* background-color: rgb(19, 78, 161); */
     border-radius: 5px;
     padding:5px 13px;
     margin: 0.5rem;
@@ -129,7 +132,8 @@ export default {
 }
 .post{
     border: none;
-    background-color: rgb(23, 93, 159) ;
+    background-color: #394867;
+    /* background-color: rgb(23, 93, 159) ; */
     color: white;
     padding: 12px 18px;
     width: 150px;
@@ -148,13 +152,17 @@ export default {
 }
 
 .topnavButton:hover{
-    background-color: rgb(63, 118, 169);
+    background-color: #9BA4B5;
+    color: #212A3E;
+    /* background-color: rgb(63, 118, 169); */
 }
 .post:hover{
     opacity: 0.85;
 }
 .active{
-    background-color: rgb(63, 118, 169);
+    background-color: #9BA4B5;
+    color: #212A3E;
+    /* background-color: rgb(63, 118, 169); */
 }
 .text-style:hover{
     opacity: 0.85;

@@ -17,7 +17,7 @@
             </div>
             <div class="title" @click="returnHomePage()">TutorFlow  <i class='fa fa-cogs'></i></div>
 
-            <div class="session dropdown" v-if="user.isLoggedIn" style="float:right">
+            <div class="session dropdown" v-if="user.isLoggedIn && user.data && !user.data.is_anon" style="float:right">
                 <i class="fa fa-user-circle-o dropbtn" style="font-size: 26px;"></i>
                 <div class="dropdown-content" style="right:0">
                     <a href="#about"><i class="fa fa-exclamation-circle"></i> {{user.data.user.email}}</a>
@@ -53,7 +53,7 @@
                     <a id="categories" @click = "filterObjects('others')">Others</a>
                 </div>
             </div>
-            <base-button :mode="{topnavButton: true, active:true == value}" @click = "filterObjects(true, 'favorite')">Favorites</base-button>
+            <base-button :mode="{topnavButton: true, active:true === value}" @click = "filterObjects(true, 'favorite')">Favorites</base-button>
             <div class="search-container">
                 <input type="text" @input="searchData()" v-model="word" placeholder="Search Questions..."/>
                 <div v-if="searched_data.length" class="search-result-container">
@@ -118,15 +118,15 @@ export default {
             }
             axios.get(this.url+'tutor-list/?search='+text, this.$store.state.authorization)
             .then((response) => {
-                console.log(response.data);
+                // console.log(response.data);
                 this.searched_data = response.data;
             })
         },
         filterObjects(val, type='category'){
             this.$store.state.activeStatus = val;
             this.$store.state.selectedCategory = val === '' ? '':val;
+            // alert(val+type)
             this.$store.dispatch('filters', {search_word:val, type:type});
-
         }
     }
 };
@@ -134,7 +134,8 @@ export default {
 <style scoped>
 .topnav{
   box-shadow: 1px 1px 4px rgba(188, 178, 178, 0.4);
-  background-color: rgb(26, 76, 123); 
+  background-color: #394867; 
+  /* background-color: rgb(26, 76, 123);  */
   color: white;
   display: flex;
   flex-direction: row;
@@ -162,10 +163,10 @@ a{
     margin-left: 2rem;
     width: 150px;
     padding: 6px 10px;
-    font-family:cursive;
+    font-family:sans-serif;
     /* color: white; */
     /* float: left; */
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     font-weight:900;
     color: rgb(255, 249, 249);
     /* background-color: rgb(25, 76, 120); */

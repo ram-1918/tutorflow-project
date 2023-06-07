@@ -1,4 +1,5 @@
 <template>
+    <base-header></base-header>
     <div id="id01" class="modal">
         <form class="modal-content" @submit.prevent="login()">
             <span class="error-msg" v-if="this.$store.state.err">{{ this.$store.state.err }}</span><br>
@@ -95,17 +96,24 @@ a{
 /* Modal Content/Box */
 .modal-content {
   background-color: #fefefe;
-  margin: 15% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
-  border: 1px solid #888;
+  margin: 5% auto 5% auto; /* 5% from the top, 15% from the bottom and centered */
+  /* border: 1px solid #888; */
   width: 35%; /* Could be more or less, depending on screen size */
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
-
 /* Change styles for span and cancel button on extra small screens */
-@media screen and (max-width: 300px) {
+@media screen and (max-width: 1000px) {
+    .model{
+        width: 100%;
+        background-color: #888;
+    }
+    .modal-content{
+        width: 100%;
+        border: none;
+    }
   span.psw {
      display: block;
      float: none;

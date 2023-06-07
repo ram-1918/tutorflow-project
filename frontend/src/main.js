@@ -10,6 +10,7 @@ import BasePopup from './components/basepages/BasePopup.vue'
 import NoContent from './components/basepages/NoContent.vue'
 import BaseSpinner from './components/basepages/BaseSpinner.vue'
 import BaseTextarea from './components/basepages/BaseTextarea.vue'
+import BaseHeader from './components/basepages/BaseHeader.vue'
 
 import TheEditor from './components/basepages/TheEditor.vue'
 import TopNav from './components/layouts/TopNav.vue'
@@ -23,6 +24,7 @@ const app = createApp(App);
 // app.component('b-form-textarea', BFormTextarea);
 app.component('base-button', BaseButton);
 app.component('base-popup', BasePopup);
+app.component('base-header', BaseHeader);
 app.component('no-content', NoContent);
 app.component('base-textarea', BaseTextarea);
 app.component('base-spinner', BaseSpinner);

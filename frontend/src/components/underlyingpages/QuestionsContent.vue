@@ -91,7 +91,7 @@ export default {
             }
             else{
                 this.$store.state.loggedInErr = 'Please SignUp or Signin to Add favorites!'
-                setTimeout(()=>{this.$store.state.loggedInErr = ""}, 8000);
+                setTimeout(()=>{this.$store.state.loggedInErr = ""}, 5500);
                 // this.$store.state.err = "";
             }
         }
