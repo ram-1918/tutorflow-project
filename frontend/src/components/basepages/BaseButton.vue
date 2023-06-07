@@ -113,7 +113,17 @@ export default {
     outline: none;
     cursor: pointer;
 }
-.session-button{
+.session-button-register{
+    border: none;
+    background-color: inherit;
+    padding: 13px 10px;
+    color: #D1D2D3;
+    font-weight: 100;
+    outline: none;
+    cursor: pointer;
+}
+.session-button-login{
+    /* border: 1px solid #D1D2D3; */
     border: none;
     background-color: inherit;
     padding: 13px 10px;

@@ -81,8 +81,8 @@
             </div>
 
             <div class="session" v-else>
-                <base-button type="button" mode="session-button"><router-link to="/register/">SignUp</router-link></base-button>
-                <base-button type="button" mode="session-button"><router-link to="/login/">SignIn</router-link></base-button>
+                <base-button type="button" mode="session-button-register"><router-link to="/register/">SignUp</router-link></base-button>
+                <base-button type="button" mode="session-button-login"><router-link to="/login/">SignIn</router-link></base-button>
             </div>
         </div>
     </div>
@@ -156,6 +156,7 @@ export default {
   transform: rotate(45deg);
   -webkit-transform: rotate(45deg);
 }
+
 a{
     color: #D1D2D3;
 }
