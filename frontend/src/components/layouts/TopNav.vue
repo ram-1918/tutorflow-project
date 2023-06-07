@@ -17,7 +17,7 @@
             </div>
             <div class="title" @click="returnHomePage()">TutorFlow  <i class='fa fa-cogs'></i></div>
 
-            <div class="session dropdown" v-if="user.isLoggedIn && user.data && !user.data.is_anon" style="float:right">
+            <div class="session dropdown" v-if="user.isLoggedIn && !user.data.user.is_anon" style="float:right">
                 <i class="fa fa-user-circle-o dropbtn" style="font-size: 26px;"></i>
                 <div class="dropdown-content" style="right:0">
                     <a href="#about"><i class="fa fa-exclamation-circle"></i> {{user.data.user.email}}</a>
@@ -30,8 +30,8 @@
             </div>
 
             <div class="session" v-else>
-                <base-button type="button" mode="session-button"><router-link to="/register/">SignUp</router-link></base-button>
-                <base-button type="button" mode="session-button"><router-link to="/login/">SignIn</router-link></base-button>
+                <base-button type="button" mode="session-button-register"><router-link to="/register/">SignUp</router-link></base-button>
+                <base-button type="button" mode="session-button-login"><router-link to="/login/">SignIn</router-link></base-button>
             </div>
         </div>
     </div>
