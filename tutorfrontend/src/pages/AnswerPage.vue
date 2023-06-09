@@ -2,9 +2,9 @@
     <div v-if = "quesDetails">
         <div class="answer-container">
             <div class="question-section">
-                <div>
+                <div class="question-header">
                     <span style="font-size: x-large; font-weight: 500;">{{ quesDetails.question }}</span>
-                    <span v-if="user.isLoggedIn && ($route.params.id === user.data.user.id)" mode = "submit" @click="changeState()" style="padding-left: 1rem; cursor:pointer">
+                    <span v-if="user.data && (id === user.data.user.id)" @click="changeState()" style="padding-left: 1rem; cursor:pointer">
                         <i class="fa fa-edit" style="font-size:24px"></i>
                     </span>
                 </div>
@@ -75,12 +75,14 @@ export default{
         const queid = this.$route.params.id;
         const idx = this.$store.state.data.findIndex((el) => {return (el.id == queid)});
         this.$store.state.selectedQueDetails = this.$store.state.data[idx];
+        this.$store.state.selectedQuesId = queid;
         this.$store.dispatch('getAnswers', {'id':queid})
     },
     beforeRouteUpdate(to, _, next) {
         const queid = to.params.id;
         const idx = this.$store.state.data.findIndex((el) => {return (el.id == queid)});
         this.$store.state.selectedQueDetails = this.$store.state.data[idx];
+        this.$store.state.selectedQuesId = queid;
         this.$store.dispatch('getAnswers', {'id':queid})
         next();
     }
@@ -111,7 +113,19 @@ select{
     padding: 0.4rem;
     /* width: 100%; */
 }
+.question-header{
+    /* background-color: rgb(224, 239, 239); */
+    /* background-image: linear-gradient(to right, rgb(243, 235, 235) , rgb(233, 223, 235), rgb(223, 232, 237)); */
+    background: transparent;
+    display: flex;
+    flex-grow: 1;
+    /* aspect-ratio: 16/3; */
+    align-items: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
 
+
+}
 .answer-container{
     display: flex;
     flex-direction: column;

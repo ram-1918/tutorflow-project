@@ -1,21 +1,24 @@
 <template>
     <tr>
         <!-- mode || (user.data && (mode === false) && (user_id === user.data.user.id)) -->
-        <td class="question-section" v-if="true">
+        <td class="question-section" v-if="mode || user.data && user_id === user.data.user.id">
             <div class = "question">
                 <span class="row-1" :class="highlightStyle">
-                    <span id="ques" @click = "displayAnswer()" >
-                        {{question}}
+                    <span class="mode" @click="toggleMode()" v-if="user.data && user_id === user.data.user.id">
+                        <span v-if="!viewMode" type="button" class="private-mode"><i class='fa fa-eye-slash'></i></span>
+                        <span v-else type="button" class="public-mode"><i class='fa fa-eye'></i></span>
                     </span>
-                        <span class="mode" @click="toggleMode()" v-if="user.data && user_id === user.data.user.id">
-                            <base-button v-if="!viewMode" type="button" mode="private-mode">Private <i class='fa fa-eye-slash'></i></base-button>
-                            <base-button v-else type="button" mode="public-mode">Public <i class='fa fa-eye'></i></base-button>
-                        </span>
-                        <div class="favorite" @click="handleFavorites">
-                            <span v-if="this.$store.state.favoritesList.find((ele) => ele === id) != undefined"><i class="fa fa-star" style="color:red"></i></span>
-                            <span v-else><i class="fa fa-star" style="color:rgb(67, 62, 62)"></i></span>
-                        </div>
+                    <span id="ques" @click = "displayAnswer()" v-if="question.length > 120">
+                        {{question.slice(0,120)}}...
+                    </span>
+                    <span id="ques" @click = "displayAnswer()" v-else>
+                        {{question.slice(0,120)}}
+                    </span>
                 </span>
+                <div class="favorite" @click="handleFavorites">
+                    <span v-if="this.$store.state.favoritesList.find((ele) => ele === id) != undefined"><i class="fa fa-star" style="color:red"></i></span>
+                    <span v-else><i class="fa fa-star" style="color:rgb(67, 62, 62)"></i></span>
+                </div>
             </div>
             <div class="answer-preview" :style="{color:this.$store.state.theme ? 'lightgrey':'slategrey'}">
                 <span v-if="formattedAnswer && formattedAnswer.length >= 180"><span id="answer-preview-span" v-html="formattedAnswer.slice(0, 180)"></span></span>
@@ -25,8 +28,8 @@
                 <div class="que-tags">
                     <span v-if="category"><base-button @click="filterdata({search_word:this.category, type: 'category'})" type = "disabled" mode = "tag">{{ category.toLowerCase() }}</base-button> </span>
                     <span v-if="topics">
-                        <span v-for = "tp in topics.split(',')" :key="tp">
-                            <base-button @click="filterdata({search_word:tp, type: 'search'})" type = "disabled" mode = "tag">{{ tp.toLowerCase() }} </base-button>
+                        <span v-for = "topic in topics.split(',')" :key="topic">
+                            <base-button @click="filterdata({search_word:topic, type: 'topic'})" type = "disabled" mode = "tag">{{ topic.toLowerCase() }} </base-button>
                         </span>
                     </span>
                 </div>
@@ -56,10 +59,10 @@ export default {
         delete_theme(){return {'delete-dark-theme':this.$store.state.theme, 'delete-light-theme':this.$store.state.theme===false }},
         highlightStyle(){
             return {
-                'selected-style-dark': this.id === this.$store.state.selectedQueId && (this.$store.state.theme), 
-                'selected-style-light': this.id === this.$store.state.selectedQueId && (!this.$store.state.theme), 
-                'style-dark': this.id != this.$store.state.selectedQueId && (this.$store.state.theme),
-                'style-light': this.id != this.$store.state.selectedQueId && (!this.$store.state.theme)
+                'selected-style-dark': this.id === this.$store.state.selectedQuesId && (this.$store.state.theme), 
+                'selected-style-light': this.id === this.$store.state.selectedQuesId && (!this.$store.state.theme), 
+                'style-dark': this.id != this.$store.state.selectedQuesId && (this.$store.state.theme),
+                'style-light': this.id != this.$store.state.selectedQuesId && (!this.$store.state.theme)
             }
         },
         favstatustoggle(){return {'fa fa-plus':this.id === this.$store.state.favStatusId, 'fa fa-minus': this.id != this.$store.state.favStatusId}}
@@ -68,7 +71,7 @@ export default {
         toggleForm(){this.$store.state.updateState},
         toggleMode(){
             this.viewMode = !this.viewMode;
-            axios.patch('https://tutorflow.info/tutor/tutor-list/'+`${this.id}`, {"mode":this.viewMode}, this.$store.state.authorization)
+            axios.patch(this.$store.state.API_URL1 + 'tutor-list/'+`${this.id}`, {"mode":this.viewMode}, this.$store.state.authorization)
             .then(() => {
             })
         },
@@ -80,7 +83,7 @@ export default {
         deleteQue(id){this.$store.dispatch('deleteQuestion', {'id':id});},
         filterdata(payload){this.$store.dispatch('filters', payload);this.$store.state.activeStatus=null},
         handleFavorites(){
-            if (this.user.isLoggedIn && !this.user.data.user.is_anon){
+            if (this.user.data && !this.user.data.user.is_anon){
                 var idx = this.$store.state.favoritesList.find((id)=>id===this.id);
                 if(idx === undefined){
                     this.$store.dispatch('addToFavorites', {'ques_id':this.id, 'user_id': this.user.data.user.id});
@@ -100,7 +103,6 @@ export default {
 </script>
 <style scoped>
 .question-section{
-    /* border: 1px solid rgb(239, 236, 236); */
     box-shadow: 1px 4px 4px rgba(0,0,0,0.2);
     border-radius: 10px;
     border-bottom: 1px solid #ccc;
@@ -110,10 +112,17 @@ export default {
     align-items: center;
     padding: 1rem;
     margin-bottom:0.4rem;
-    /* background-color: rgba(165, 223, 229, 0.491); */
     width: 100%;
     min-height: 130px;
     max-height: 250px;
+}
+.private-mode{
+    color: red;
+    padding-right: 10px;
+}
+.public-mode{
+    color: black;
+    padding-right: 10px;
 }
 pre{
     font-size: 1rem;
@@ -127,26 +136,20 @@ pre{
     flex-direction: row;
     align-items: center;
     justify-content: space-between;  
+    text-align: left;
     width: 100%;
     cursor:pointer;
-    /* border-bottom: 1px solid rgb(200, 198, 198); */
-    /* padding: 5px; */
 }
 
 .row-1{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;  
     width: 100%;
     cursor:pointer;
-    /* background-color: #ccc; */
 }
 #ques{
     text-align: left;
     padding-right: 15px;
     width: 70%;
-    /* background-color: rgb(8, 162, 240); */
+    line-height: 1.2rem;
 }
 #ques:hover{
     opacity: 0.8;
@@ -162,7 +165,7 @@ pre{
 }
 .style-light{
     /* color: rgb(75, 117, 175); */
-    color: rgb(25, 106, 218);
+    color: rgb(45, 92, 159);
 
 }
 .style-dark{
@@ -170,8 +173,7 @@ pre{
 }
 .selected-style-light{
     /* color: rgb(4, 100, 255); */
-    color: rgb(84, 112, 157);
-    font-weight: bold;
+    color: rgb(21, 97, 219);
 }
 .selected-style-dark{
     color: rgb(255, 255, 255);
@@ -197,8 +199,9 @@ pre{
     width: 100%;
     font-weight: 300; /* dark mode */
     font-size: 0.75rem;
+    line-height: 1rem;
     color: rgb(192, 187, 187);
-    /* background-color: aqua; */
+    padding-top: 5px;
     text-align: left;
 }
 #answer-preview-span{

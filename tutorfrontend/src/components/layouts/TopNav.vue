@@ -12,12 +12,13 @@
                     <a id="categories" @click = "filterObjects('vue')">Vuejs</a>
                     <a id="categories" @click = "filterObjects('aws')">AWS</a>
                     <a id="categories" @click = "filterObjects('pyspark')">PySpark</a>
+                    <a id="categories" @click = "filterObjects('web')">Web</a>
                     <a id="categories" @click = "filterObjects('others')">Others</a>
                 </div>
             </div>
             <div class="title" @click="returnHomePage()">TutorFlow  <i class='fa fa-cogs'></i></div>
 
-            <div class="session dropdown" v-if="user.isLoggedIn && !user.data.user.is_anon" style="float:right">
+            <div class="session dropdown" v-if="user.data && !user.data.user.is_anon" style="float:right">
                 <i class="fa fa-user-circle-o dropbtn" style="font-size: 26px;"></i>
                 <div class="dropdown-content" style="right:0">
                     <a href="#about"><i class="fa fa-exclamation-circle"></i> {{user.data.user.email}}</a>
@@ -38,6 +39,7 @@
 
     <div v-else class="topnav" :class="{'topnav-theme-change':this.$store.state.theme}">
         <div class="title" @click="returnHomePage()">TutorFlow  <i class='fa fa-cogs'></i></div>
+        {{ user.data }}
         <div class="nav-buttons">
             <base-button :mode="{topnavButton: true, active:''== value}" @click = "filterObjects('')">All</base-button>
             <div class="categories dropdown">
@@ -50,6 +52,7 @@
                     <a id="categories" @click = "filterObjects('vue')">Vuejs</a>
                     <a id="categories" @click = "filterObjects('aws')">AWS</a>
                     <a id="categories" @click = "filterObjects('pyspark')">PySpark</a>
+                    <a id="categories" @click = "filterObjects('web')">Web</a>
                     <a id="categories" @click = "filterObjects('others')">Others</a>
                 </div>
             </div>
@@ -68,7 +71,7 @@
                 <button  @click = "toggleTheme()" class="dark" :class="{'dark-theme-toggle': this.$store.state.theme}"><i class="fa fa-moon-o" style="font-size:12px"></i></button>
             </div>
 
-            <div class="session dropdown" v-if="user.isLoggedIn && !user.data.user.is_anon" style="float:right">
+            <div class="session dropdown" v-if="user.data && !user.data.user.is_anon" style="float:right">
                 <i class="fa fa-user-circle-o dropbtn" style="font-size: 26px;"></i>
                 <div class="dropdown-content" style="right:0">
                     <a href=""><i class="fa fa-user-circle"></i> {{user.data.user.email}}</a>
@@ -95,6 +98,7 @@ import { mapMutations } from 'vuex';
 export default {
     // inject:['filterFunc'],
     ...mapMutations(['getUserQuestions']),
+    // ...mapGetters(['isAnon']),
     data(){
         return{
             value: this.$store.state.activeStatus,

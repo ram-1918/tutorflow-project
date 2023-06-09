@@ -19,9 +19,9 @@ const store = createStore({
     },
     state() {
         return {
-            API_URL1: 'https://tutorflow.info/tutor/', // development URL
+            API_URL1: 'https://tutorflow.info/tutor/', // Prod URL
             // API_URL1: 'http://18.224.55.89:8000/api/', // development URL
-            // API_URL1: 'http://127.0.0.1:8001/api/', // development URL
+            // API_URL1: 'http://127.0.0.1:8000/api/', // development URL
             // API_URL: 'http://tutorapi.com:8000/api/tutor-list/', // Production URL
             authorization: {auth: {username:'rbhaviri@buffalo.edu', password:'Qwerty123'}},
             currUser: localStorage.getItem('user') ? {'isLoggedIn':true, 'data':JSON.parse(localStorage.getItem('user'))}:{'isLoggedIn':false, 'data':null},
@@ -76,10 +76,11 @@ const store = createStore({
             })
         },
         login({state}, payload){
+            alert("sratr")
             const URL = state.API_URL1+'login/';
             const data = payload.data;
             state.isLoading = true;
-            alert("login")
+            alert("loginvskngkwngkjrbgjk")
             // API Call
             axios.post(URL, data)
             .then((response)=>{
@@ -97,7 +98,12 @@ const store = createStore({
                     }
                     else{ state.err = "Email or password didnt match!" }
                 })
-            .catch((errors)=>{console.log(errors);})
+            .catch((errors)=>{
+                console.log(errors);
+                router.push({name:'login'});
+                state.isLoading = false;
+                state.err = "Email or password is incorrect!";
+            })
         },
         updateProfile({state}, payload){
             const id = state.currUser.data.user.id;
@@ -133,7 +139,7 @@ const store = createStore({
             // API CALL 
             axios.post(URL1, payload.que, state.authorization)
             .then((response) => {
-                state.data.unshift(response.data);
+                state.data.push(response.data);
                 var queid = response.data.id;
                 payload.ans.question_id = queid;
                 // Subsequent API CALL to Answers API
@@ -223,7 +229,7 @@ const store = createStore({
               })
         },
         filters({state}, payload){
-            var search_url = state.API_URL1 + 'tutor-list/' + '?ordering=date_create';
+            var search_url = state.API_URL1 + 'tutor-list/';
             const type = payload.type;
             const searchword = payload.search_word;
             if(searchword != ''){
@@ -232,7 +238,7 @@ const store = createStore({
                         search_url = state.API_URL1 + 'tutor-list/' + '?category='+searchword;
                         break;
                     case 'topic':
-                        search_url = state.API_URL1 + 'tutor-list/' + '?topic='+searchword;
+                        search_url = state.API_URL1 + 'tutor-list/' + '?search='+searchword;
                         break;
                     case 'favorite':
                         search_url = state.API_URL1 + 'favorites_ro/';
@@ -255,7 +261,7 @@ const store = createStore({
                         }
                         return
                     case 'search':
-                        search_url = state.API_URL1 + 'tutor-list/' + '?ordering=date_create&'+ 'search='+searchword;
+                        search_url = state.API_URL1 + 'tutor-list/' + '?search='+searchword;
                         break
                 }
             }
@@ -319,7 +325,7 @@ const store = createStore({
             if(user_data){
               var user = JSON.parse(user_data)
               // likes for user userid
-              axios.get('https://tutorflow.info/tutor/likes/?uid='+ `${user.user.id}`+'&status='+ `${1}`, state.authorization)
+              axios.get(state.API_URL1 + 'likes/?uid='+ `${user.user.id}`+'&status='+ `${1}`, state.authorization)
               .then((response) =>{
                 state.likesList = response.data;
               })
@@ -327,7 +333,7 @@ const store = createStore({
                 console.log(errors)
               })
               // Dislikes for user userid
-              axios.get('https://tutorflow.info/tutor/likes/?uid='+ `${user.user.id}`+'&status='+ `${0}`, state.authorization)
+              axios.get(state.API_URL1 + 'likes/?uid='+ `${user.user.id}`+'&status='+ `${0}`, state.authorization)
               .then((response) =>{
                 state.dislikesList = response.data;
               })
@@ -366,6 +372,13 @@ const store = createStore({
     getters: {
         getData(state){return state.data;},
         getSelectedQueId(state){return state.dataBasedOnId;},
+        isAnon() {
+            const user = localStorage.getItem('user', null)
+            if(user && user.user.is_anon){
+                return true
+            }
+            return false
+        }
     },
 });
 

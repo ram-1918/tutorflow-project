@@ -1,9 +1,10 @@
 from django.urls import path, re_path
-from .views import ListUsersAPI, GetUserAPI, LoginAPI, AnonymousLoginAPI, CreatePost, UpdatePost, ListAnswersAPI, GetAnswersAPI, ListAnswersAPI_RO
+from .views import ListUsersAPI, ListAllUsersAPI, GetUserAPI, LoginAPI, AnonymousLoginAPI, CreatePost, UpdatePost, ListAnswersAPI, GetAnswersAPI, ListAnswersAPI_RO
 from .views import ListFavoritesAPI, GetFavoritesAPI, ListFavoritesAPI_RO, GetFavoritesAPI_RO, FeedbackAPI, LikesAPI, GetLikesAPI, FeedbackDeleteAPI
 
 
 urlpatterns = [
+    path("users/", ListAllUsersAPI.as_view()),
     path("user/", ListUsersAPI.as_view()),
     path("user/<int:pk>", GetUserAPI.as_view()),
     path("login/", LoginAPI.as_view()),

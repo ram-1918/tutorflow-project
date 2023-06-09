@@ -22,11 +22,11 @@ export default {
     color: red;
     padding: 12px 20px;
     width: 110px;
-    border-top-right-radius: 10rem;
+    /* border-top-right-radius: 10rem;
     border-top-left-radius: 10rem;
     border-bottom-right-radius: 10rem;
     border-bottom-left-radius: 10rem;
-    transition: 0.3s cubic-bezier(0.18, 0.89, 0.35, 1.15) all;
+    transition: 0.3s cubic-bezier(0.18, 0.89, 0.35, 1.15) all; */
 }
 .public-mode{
     /* background-color: #03A9F4; */

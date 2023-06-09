@@ -117,7 +117,7 @@ export default {
         return {
             question: '',
             answer:'',
-            category: this.$store.state.selectedCategory,
+            category: this.$store.state.selectedCategory ? this.$store.state.selectedCategory : ' ',
             topic: '',
             student: this.$store.state.currUser.data.user.firstname,
             links: '',

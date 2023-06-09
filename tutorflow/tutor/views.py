@@ -58,11 +58,12 @@ class AnonymousLoginAPI(APIView):
         user_obj.lastname = user_last
         user_obj.email = user_email
         user_obj.password = user_pass
+        user_obj.is_anon = True
         user_obj.save()
         # print(user_obj)
         serializer = LoginSerializer(data=data)
         if serializer.is_valid():
-            # print("Serializer success mathod!", serializer.validated_data['user'])
+            print("Serializer success mathod!", serializer.validated_data['user'])
             user = serializer.validated_data['user']
             token = RefreshToken.for_user(user)
             token.payload['superuser'] = user.is_superuser
@@ -124,6 +125,11 @@ class ListAnswersAPI(generics.ListCreateAPIView):
 
     authentication_classes = [BasicAuthentication]
     permission_classes = [IsAuthenticated]
+
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['question_id', 'answer', 'date_answered', 'topic', 'user', 'student_name']
+    search_fields = ['question_id', 'answer', 'topic', 'user', 'student_name']
+    ordering_fields = ['date_answered']
 
     def get_queryset(self):
         if self.request.query_params:
