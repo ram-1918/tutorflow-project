@@ -27,7 +27,6 @@ export default {
     if (!user){
       axios.post(this.$store.state.API_URL1 +'anon-login/', {"time": Date.now()}, this.$store.state.authorization)
       .then((response) => {
-        console.log("Anon user Token Generated ", response.data);
         localStorage.setItem('user',JSON.stringify(response.data));
       })
     }
@@ -35,7 +34,6 @@ export default {
   created(){
     this.$store.dispatch('loadQuestions');
     const user = localStorage.getItem('user', null);
-    console.log("App Create ", user)
     if (user){
         this.$store.dispatch('loadFavorites');
     }

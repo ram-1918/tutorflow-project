@@ -39,7 +39,6 @@
 
     <div v-else class="topnav" :class="{'topnav-theme-change':this.$store.state.theme}">
         <div class="title" @click="returnHomePage()">TutorFlow  <i class='fa fa-cogs'></i></div>
-        {{ user.data }}
         <div class="nav-buttons">
             <base-button :mode="{topnavButton: true, active:''== value}" @click = "filterObjects('')">All</base-button>
             <div class="categories dropdown">

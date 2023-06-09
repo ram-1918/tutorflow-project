@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-f5vtw!5z7g6(%%ty(n_pk@*l2$)fpm@op#dx@0s9x+op=9!i&$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -123,26 +123,26 @@ WSGI_APPLICATION = 'tutorflow.wsgi.application'
 #     }
 # }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'tutordb',
-#         'USER': 'tutor',
-#         'PASSWORD': 'tutor123',
-#         'HOST': 'localhost',
-#     }
-# }
-
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "tutorflow",
-        "USER": "postgres",
-        "PASSWORD": "Prcjproject123",
-        "HOST":"127.0.0.1",
-        "PORT":"5434"
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'tutordb',
+        'USER': 'tutor',
+        'PASSWORD': 'tutor123',
+        'HOST': 'localhost',
     }
 }
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql_psycopg2",
+#         "NAME": "tutorflow",
+#         "USER": "postgres",
+#         "PASSWORD": "Prcjproject123",
+#         "HOST":"127.0.0.1",
+#         "PORT":"5434"
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

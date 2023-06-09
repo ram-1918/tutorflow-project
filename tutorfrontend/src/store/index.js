@@ -76,16 +76,12 @@ const store = createStore({
             })
         },
         login({state}, payload){
-            alert("sratr")
             const URL = state.API_URL1+'login/';
             const data = payload.data;
             state.isLoading = true;
-            alert("loginvskngkwngkjrbgjk")
             // API Call
             axios.post(URL, data)
             .then((response)=>{
-                    alert("Inside login")
-                    console.log(response.data);
                     state.isLoading = false;
                     if (response.data){
                         if(localStorage.getItem('user', null)){
@@ -125,12 +121,11 @@ const store = createStore({
             const URL = state.API_URL1+'tutor-list/'
             axios.get(URL, state.authorization)
             .then((response) => {
-                console.log("inside load questions", response.data);
                 state.isLoading = false;
                 commit('loadQuestions', response.data);
             })
             .catch((errors) => {
-                console.log("que ",errors)
+                console.log(errors)
               })
         },
         postData({state}, payload){
@@ -149,7 +144,7 @@ const store = createStore({
                     // state.addMsg = "Question added!";
                 })
                 .catch((errors) => {
-                    console.log("que.ans ",errors)
+                    console.log(errors)
                   })
 
                 this.dispatch('loadQuestions');
@@ -157,7 +152,7 @@ const store = createStore({
                 router.push('/');
             })
             .catch((errors) => {
-                console.log("que ",errors)
+                console.log(errors)
               })
         },
         patchAns({state,dispatch}, payload){
@@ -170,7 +165,7 @@ const store = createStore({
 
             }))
             .catch((errors) => {
-                console.log("que ",errors)
+                console.log(errors)
               })
         },
         deleteQuestion({state}, payload){
@@ -186,7 +181,7 @@ const store = createStore({
                         state.data.splice(idx,1);
                     })
                     .catch((errors) => {
-                        console.log("que ",errors)
+                        console.log(errors)
                       })
                 }
             state.surelyDeleteTab = false
@@ -206,7 +201,7 @@ const store = createStore({
                         state.answers.splice(idx,1);
                     })
                     .catch((errors) => {
-                        console.log("ans ",errors)
+                        console.log(errors)
                       })
                 }
             state.surelyDeleteTab = false
@@ -225,7 +220,7 @@ const store = createStore({
                 state.answers = response.data;
             })
             .catch((errors) => {
-                console.log("ans ",errors)
+                console.log(errors)
               })
         },
         filters({state}, payload){
@@ -254,7 +249,7 @@ const store = createStore({
                                 state.sideNav = true;
                             })
                             .catch((errors) => {
-                                console.log("favs ",errors)
+                                console.log(errors)
                               })                        
                         }else{
                             state.loggedInErr = "Please Login to Add favorites!"
@@ -287,7 +282,7 @@ const store = createStore({
                 }
             })
             .catch((errors) => {
-                console.log("favs ",errors)
+                console.log(errors)
               })
         },
         addToFavorites({state}, payload){
@@ -302,7 +297,7 @@ const store = createStore({
                 state.addMsg = "Added to your favorites!";
             })
             .catch((errors) => {
-                console.log("favs ",errors)
+                console.log(errors)
               })
         },
         removeFavorite({state}, payload){
@@ -317,7 +312,7 @@ const store = createStore({
                 state.deleteMsg = "Removed from your favorites!";
             })
             .catch((errors) => {
-                console.log("favs ",errors)
+                console.log(errors)
               })
         },
         manageLikes({state}){

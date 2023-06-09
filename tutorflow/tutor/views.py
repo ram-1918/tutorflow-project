@@ -63,7 +63,7 @@ class AnonymousLoginAPI(APIView):
         # print(user_obj)
         serializer = LoginSerializer(data=data)
         if serializer.is_valid():
-            print("Serializer success mathod!", serializer.validated_data['user'])
+            # print("Serializer success mathod!", serializer.validated_data['user'])
             user = serializer.validated_data['user']
             token = RefreshToken.for_user(user)
             token.payload['superuser'] = user.is_superuser

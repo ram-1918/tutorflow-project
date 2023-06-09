@@ -55,13 +55,8 @@ export default {
     },
     methods:{
         filterdata(payload){this.$store.dispatch('filters', payload);this.$store.state.activeStatus=null},
-        deleteAns(id){this.$store.dispatch('deleteAnswer', {'id':id}); console.log("DeleteAns Method", id)},
+        deleteAns(id){this.$store.dispatch('deleteAnswer', {'id':id});},
         handleLike(value, id, uid){
-            if(this.user.data.is_anon){
-                // Create anonymous user
-                console.log("likes but not loggedin")
-                return 
-            }
             var payload;
             var method;
             var eleId, idx;
@@ -112,7 +107,7 @@ export default {
                         axios.patch(this.$store.state.API_URL1 +'answer/'+`${id}`, {"status": 1}, this.$store.state.authorization)
                         .then(() => {
                             this.$store.state.likesList.push(res.data);
-                            console.log(res.data)
+                            // console.log(res.data)
                         })
                     }else{
                         axios.patch(this.$store.state.API_URL1 +'answer/'+`${id}`, {"status": 0}, this.$store.state.authorization)
