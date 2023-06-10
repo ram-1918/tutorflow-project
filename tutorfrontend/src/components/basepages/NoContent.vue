@@ -21,7 +21,7 @@ div{
     align-items: center;
     justify-content: center;
     width: 100%;
-    aspect-ratio: 16/7;
+    aspect-ratio: 16/6;
 
 }
 .nothing{

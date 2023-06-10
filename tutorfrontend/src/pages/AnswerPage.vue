@@ -24,7 +24,7 @@
         </div>
     </div>
     <answer-content1 v-if = "quesDetails" :quesid="quesDetails.id"></answer-content1>
-    <no-content type="nothing" title="Select a question to display!" v-if="!quesDetails"></no-content>
+    <no-content type="nothing" title="No answer found, this question may be private or does not exist! " v-if="!quesDetails"></no-content>
 
 </template>
 <script>

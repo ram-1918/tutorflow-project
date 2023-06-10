@@ -18,7 +18,8 @@
                 <span v-if="isMobileScreen" style="color: rgb(13, 90, 199);margin-top: 1.2rem;font-size:16px;cursor:pointer" @click="toggleSideNav()"><i class="fa fa-arrow-left"></i> View Questions</span>
             </div>
             <div class="view-answer">
-                <router-view></router-view>
+                <no-content type="nothing" title="Click on a question to display!" v-if="this.$route.name==='home'"></no-content>
+                <router-view v-else></router-view>
             </div>
         </div>
         <div class="content" v-else>
@@ -26,7 +27,8 @@
                 <questions-page></questions-page>
             </div>
             <div class = "right">
-                <router-view></router-view>
+                <no-content type="nothing" title="Click on a question to display!" v-if="this.$route.name==='home'"></no-content>
+                <router-view v-else></router-view>
             </div>
         </div>
         <div class="footer-section">
