@@ -1,6 +1,8 @@
 <template>
     <div :class="type">
-        <slot>{{ title }}</slot>
+        <span class="title">
+            <slot>{{ title }}</slot>
+        </span>
     </div>
 </template>
 
@@ -12,14 +14,23 @@ export default {
 
 <style scoped>
 div{
-    border: 1px solid rgb(114, 124, 138);
+    border: none;
     padding: 20px;
     width: fit-content;
-    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    aspect-ratio: 16/7;
+
 }
-.no-question{
+.nothing{
+    background-color: rgb(225, 229, 232);
+}
+.title{
     font-size: larger;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: bolder;
 }
 .page-not-found{
     margin: auto;

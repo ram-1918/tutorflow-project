@@ -2,8 +2,8 @@
     <div class="answer-tab">
         <div class="answer-tab-topnav">
             <div class="name-section">
-                <span style="font-size:medium; font-weight:bold">{{ answer.student_name }}</span>
-                <span style="font-size: smaller; font-weight: lighter;">{{date}} {{time}} ({{ days }} days ago)</span>
+                <span style="font-size:medium; font-weight:bold"><i class="fa fa-user-circle-o" style="font-size:18px"></i> {{ answer.student_name }}</span>
+                <span style="font-size: smaller; font-weight: lighter;">{{date}} at {{time}}</span>
             </div>
             <div class="like-buttons">
                 <div class="like-count-div">
@@ -16,14 +16,14 @@
                 </div>
             </div>
         </div>
-        <pre><span v-html="answer.answer"></span></pre>
+        <pre><div class="answer" v-html="answer.answer"></div></pre>
         <hr>
         <div class="que-tags">
             <span v-if = "quesCat">
                 <base-button @click="filterdata({search_word:ans.category, type: 'category'})" type = "disabled" mode = "tag">{{ quesCat.toLowerCase() }}</base-button>
             </span>
             <span v-if="answer.topic"><span v-for = "tp in answer.topic.split(',')" :key="tp">
-                <base-button @click="filterdata({search_word:tp, type: 'search'})" type = "disabled" mode = "tag">{{ tp.toLowerCase() }}</base-button>
+                <base-button v-if="tp" @click="filterdata({search_word:tp, type: 'search'})" type = "disabled" mode = "tag">{{ tp.toLowerCase() }}</base-button>
             </span></span>
         </div>
         <div class = "refernces" v-if="answer.links">
@@ -163,15 +163,29 @@ a{
     border-bottom: 1px solid rgb(219, 215, 215);
 }
 #answer-section pre{
+    margin: 0;
+    padding: 0;
+    display: flex;
     font-size: 0.85rem;
     padding-left: 5px;
     padding-right: 20px;
     line-height: 1.5rem;
     text-align: left;
-    word-wrap: break-word;
     white-space:pre-wrap;
-    /* background-color: aliceblue; */
+    word-wrap: break-word;
+    list-style-type: none;
+    list-style: none;
+    /* background-color: rgb(43, 46, 49); */
+    width: 100%;
 }
+.answer{
+    /* background-color: rgb(62, 133, 181); */
+    /* color: white; */
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
 #link{
     text-align: left;
     word-wrap: break-word;
@@ -182,7 +196,7 @@ a{
 .name-section{
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
 }
 .like-buttons{
     display: flex;

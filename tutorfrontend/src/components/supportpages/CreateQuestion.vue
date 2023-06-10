@@ -39,64 +39,30 @@
             <button @click = "closeform()" style="float: right; border: none; cursor: pointer"><i class="fa fa-close" style="font-size:24px"></i></button>
             <form @submit.prevent = "postData()">
                 <h3>Post your question</h3>
-            <base-textarea>
-                <template #question>
-                    <textarea id="question" v-model="question" placeholder="Your question..." autofocus></textarea>
-                </template>
-            </base-textarea>
-            <base-textarea>
-                <template #answer>
-                    <div id="answer2" ref ="editorContainer"></div>
-                </template>
-            </base-textarea>
-            
-            <base-textarea>
-                <template #choosefile>
-                    <span style="font-size:small;font-weight: lighter;color:rgb(37, 94, 158)">Or Choose your answer from a file (Plain text files)</span> <br>
-                    <label for="files" class="file-selector">Choose file <i class="fa fa-file-code-o"></i></label> <span style="color:rgb(176, 73, 73)">{{ chosen_file_name }}</span>
-                    <input id="files" type="file" style="visibility: hidden" @change="handleFileUpload">
-                </template>
-            </base-textarea>
-            <div class="sub-row">
-                <base-textarea>
-                    <template #category>
-                        <select v-model="category">
-                            <option value=" " selected disabled hidden> Choose an option </option>
-                            <option value = "python">Python</option>
-                            <option value = "java">Java</option>
-                            <option value = "sql">SQL</option>
-                            <option value = "pyspark">PySpark</option>
-                            <option value = "vue">Vuejs</option>
-                            <option value = "django">Django</option>
-                            <option value = "aws">AWS</option>
-                            <option value = "web">Web Technologies</option>
-                            <option value = "others">Others</option>
-                        </select>
-
-                    </template>
-                </base-textarea>
-                <base-textarea>
-                    <template #topic>
-                        <input type="text" id="topic" v-model="topic" placeholder="Related topics, Use comma(',') after each topic...">
-                    </template>
-                </base-textarea>
-                <base-textarea>
-                    <template #student>
-                        <input type="text" id="student" v-model="student" placeholder="Your name..." readonly>
-                    </template>
-                </base-textarea>
-            </div>
-            <base-textarea>
-                <template #links>
-                    <span style="text-decoration:underline;">References</span>
-                    <textarea placeholder="Share any links..." v-model = "links"></textarea>
-                </template>
-            </base-textarea>
-            <base-textarea>
-                <template #post>
-                    <base-button type = "submit" mode="post">Post</base-button>
-                </template>
-            </base-textarea>
+                <textarea id="question" v-model="question" placeholder="Your question..." autofocus></textarea>
+                <div id="answer2" ref ="editorContainer"></div>
+                <span style="font-size:small;font-weight: lighter;color:rgb(37, 94, 158)">Or Choose your answer from a file (Plain text files)</span> <br>
+                <label for="files" class="file-selector">Choose file <i class="fa fa-file-code-o"></i></label> <span style="color:rgb(176, 73, 73)">{{ chosen_file_name }}</span>
+                <input id="files" type="file" style="visibility: hidden" @change="handleFileUpload">
+                <div class="sub-row">
+                    <select v-model="category">
+                        <option value=" " selected disabled hidden> Choose an option </option>
+                        <option value = "python">Python</option>
+                        <option value = "java">Java</option>
+                        <option value = "sql">SQL</option>
+                        <option value = "pyspark">PySpark</option>
+                        <option value = "vue">Vuejs</option>
+                        <option value = "django">Django</option>
+                        <option value = "aws">AWS</option>
+                        <option value = "web">Web Technologies</option>
+                        <option value = "others">Others</option>
+                    </select>
+                    <input type="text" id="topic" v-model="topic" placeholder="Related topics, Use comma(',') after each topic...">
+                    <input type="text" id="student" v-model="student" placeholder="Your name..." readonly>
+                </div>
+                <span style="text-decoration:underline;">References</span>
+                <textarea placeholder="Share any links..." v-model = "links"></textarea>
+                <base-button type = "submit" mode="post">Post</base-button>
             </form>
         </div>
         <div v-else>
@@ -213,32 +179,19 @@ export default {
         placeholder: 'Enter your answer...',
         modules: {
             toolbar: [
-            [{ header: [1, 2, 3, false] }],
-            ['bold', 'italic', 'underline', 'strike'],
-            [{ list: 'ordered' }, { list: 'bullet' }],
-            ['link', 'image'],
-            ['clean']
+                [{ header: [1, 2, 3, false] }],
+                ['bold', 'italic', 'underline', 'strike'],
+                [{ list: 'ordered' }, { list: 'bullet' }],
+                [{ indent: '-1' }, { indent: '+1' }],
+                ['link', 'image'],
+                ['code-block', 'blockquote'],
+                ['clean']
             ]
         }
-    });
+        });
     }
 };
 </script>
-<!-- 
-{
-    "question_id": {
-        "question": "What is NGINX?",
-        "answer": "It is a web server, and it can also acts as a reverse proxy and a load balancer.",
-        "category": ,
-        "topic": ,
-        "student_name": ,
-        "links": "",
-        "favorite": false,
-        "user": null
-    },
-    "answer": "A Web server"
-}
--->
 <style scoped>
 .BackScreen{
     top: 0;
@@ -250,6 +203,7 @@ export default {
     z-index: 10;
     background-color: rgba(0,0,0,0.4);
     opacity: 0.7;
+    font-family: ;
 }
 h3{
     font-size: larger;

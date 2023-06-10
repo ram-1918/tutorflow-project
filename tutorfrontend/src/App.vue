@@ -62,6 +62,22 @@ a{
   color: rgb(0, 119, 255);
   text-decoration: none;
 }
+/* .quill-answer ol,
+.quill-answer ul {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-left: 20px;
+  background-color: aqua;
+}
+
+.quill-answer li {
+  margin-bottom: 10px;
+  background-color: rgb(145, 145, 175);
+} */
+/* .quill-answer .ql-indent-1{
+  background-color: #D1D2D3;
+  padding-left: 20px;
+} */
 
 img {
   display: block;
@@ -76,19 +92,41 @@ img {
   color: white; /* dark mode */
   /* font-weight:200; dark mode */
 }
-.code{
-    background-color: #302c36; /*#19171D;*/
-    color: #D1D2D3;
+.code, .ql-syntax{
+    /* background-color: #302c36; */
+    background-color:rgb(238, 244, 244); /*#19171D;*/
+    color: black;
     box-shadow: 1px 4px 3px rgba(0,0,0,0,5);
     padding: 0.4rem;
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
-    font-weight: 500;
     font-family:Verdana, Geneva, Tahoma, sans-serif;
     line-height: 1.5rem;
     border-radius: 0.2rem;
     width: 100%;
     box-shadow: 1px 4px 5px rgb(0,0,0,0.4);
+}
+blockquote{
+  background-color: beige;
+  border-left: 5px solid rgb(216, 216, 12);
+  padding: 10px;
+}
+blockquote::before{
+  content: "Note: ";
+  color: rgb(77, 77, 8);
+  font-weight: bold;
+}
+.code span{
+  margin-bottom: 0.5rem;
+  font-size: 1.03rem;
+  font-weight: lighter;
+  opacity: 0.8;
+  color: rgb(235, 177, 61);
+}
+.code span::after{
+  content: "</>";
+  width: 100%;
+  background-color: tomato;
 }
 .h1{
   font-size: 1.2rem;
@@ -105,16 +143,7 @@ img {
   color: rgb(146, 86, 30);
   font-weight: bolder;
 }
-.code span{
-  margin-bottom: 0.5rem;
-  font-size: 1.03rem;
-  font-weight: lighter;
-  opacity: 0.8;
-  color: rgb(235, 177, 61);
-}
-.code span::after{
-  content: "</>";
-}
+
 .note{
   background-color: beige;
   margin-top: 1rem;

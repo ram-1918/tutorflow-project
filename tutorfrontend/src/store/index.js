@@ -134,7 +134,7 @@ const store = createStore({
             // API CALL 
             axios.post(URL1, payload.que, state.authorization)
             .then((response) => {
-                state.data.push(response.data);
+                state.data.unshift(response.data);
                 var queid = response.data.id;
                 payload.ans.question_id = queid;
                 // Subsequent API CALL to Answers API

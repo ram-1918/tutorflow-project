@@ -41,7 +41,7 @@
             <h2>Please leave a feedback!</h2>
             <!-- <div class="feedback-form"> -->
             <form @submit.prevent="submitFeedback" class="col-3-form">
-                <input type="email" v-model="email" placeholder="Enter your email..." v-if="!this.$store.state.currUser.isLoggedIn">
+                <input type="email" v-model="email" placeholder="Enter your email..." v-if="user.data && user.data.user.is_anon  ">
                 <textarea rows="3" v-model="feedback" placeholder="Enter your Feedback..."></textarea>
                 <base-button mode="feedback-submit">Submit</base-button>
             </form>
@@ -60,6 +60,9 @@ export default {
             linkedin: 'https://www.linkedin.com/in/ramchandrab2604/',
             github: 'https://github.com/ram-1918'
         }
+    },
+    computed:{
+        user(){return this.$store.state.currUser}
     },
     methods:{
         submitFeedback(){
@@ -80,6 +83,7 @@ export default {
     left: 0;
     position: relative;
     width: 100%;
+    z-index: 0;
     /* height: 15rem; */
     display: flex;
     flex-direction: row;

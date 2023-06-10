@@ -15,7 +15,7 @@
                     <a v-if="isMobileScreen" href="javascript:void(0)" class="closebtn" @click="toggleSideNav()">&times;</a>  
                     <questions-page></questions-page>
                 </div>
-                <span v-if="isMobileScreen" style="color: rgb(13, 90, 199);margin-top: 1.2rem;font-size:18px;cursor:pointer" @click="toggleSideNav()">&#9776; View Questions</span>
+                <span v-if="isMobileScreen" style="color: rgb(13, 90, 199);margin-top: 1.2rem;font-size:16px;cursor:pointer" @click="toggleSideNav()"><i class="fa fa-arrow-left"></i> View Questions</span>
             </div>
             <div class="view-answer">
                 <router-view></router-view>
@@ -161,7 +161,7 @@ export default {
     display: none;
     position: fixed;
     z-index: 1;
-    top: 5%;
+    top: 0;
     left: 0;
     background-color: white;
     overflow-x: scroll;
@@ -177,9 +177,10 @@ export default {
 }
 .view-question{
     /* background-color: rgb(137, 174, 206); */
-    width: 100%;
+    width: fit-content;
     padding: 10px;
-    border: 1px solid rgb(191, 181, 181);
+    border: none;
+    box-shadow: 1px 1px 4px rgba(0,0,0,0.4);
     margin-bottom: 1rem;
 }
 .view-answer{

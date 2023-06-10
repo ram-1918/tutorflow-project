@@ -8,7 +8,7 @@
                         <i class="fa fa-edit" style="font-size:24px"></i>
                     </span>
                 </div>
-                <span style="font-size: small; font-weight: 300;">Date Posted: {{ date }} {{ time }} ({{ days }} days ago)</span>
+                <span style="font-size: small; font-weight: 300;">Date Posted: {{ date }} at {{ time }}</span>
             </div> 
             <p>Total Answers: {{ ansDetails.length }}</p>
             <div v-if="ansDetails">
@@ -24,7 +24,7 @@
         </div>
     </div>
     <answer-content1 v-if = "quesDetails" :quesid="quesDetails.id"></answer-content1>
-    <no-content v-if="!quesDetails"></no-content>
+    <no-content type="nothing" title="Select a question to display!" v-if="!quesDetails"></no-content>
 
 </template>
 <script>
@@ -75,7 +75,7 @@ export default{
         const queid = this.$route.params.id;
         const idx = this.$store.state.data.findIndex((el) => {return (el.id == queid)});
         this.$store.state.selectedQueDetails = this.$store.state.data[idx];
-        this.$store.state.selectedQuesId = queid;
+        // this.$store.state.selectedQuesId = queid;
         this.$store.dispatch('getAnswers', {'id':queid})
     },
     beforeRouteUpdate(to, _, next) {

@@ -314,7 +314,7 @@ input::placeholder{
   min-width: 230px;
   /* right:0; */
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 5;
+  z-index: 4;
 
 }
 

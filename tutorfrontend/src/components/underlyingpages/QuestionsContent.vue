@@ -29,7 +29,7 @@
                     <span v-if="category"><base-button @click="filterdata({search_word:this.category, type: 'category'})" type = "disabled" mode = "tag">{{ category.toLowerCase() }}</base-button> </span>
                     <span v-if="topics">
                         <span v-for = "topic in topics.split(',')" :key="topic">
-                            <base-button @click="filterdata({search_word:topic, type: 'topic'})" type = "disabled" mode = "tag">{{ topic.toLowerCase() }} </base-button>
+                            <base-button v-if="topic" @click="filterdata({search_word:topic, type: 'topic'})" type = "disabled" mode = "tag">{{ topic.toLowerCase() }} </base-button>
                         </span>
                     </span>
                 </div>
