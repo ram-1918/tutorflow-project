@@ -24,6 +24,9 @@ import secrets
 import json
 
 # Create your views here.
+def get_hashed_password(plain_text_password):
+    salt = bcrypt.gensalt(12)
+    return bcrypt.hashpw(plain_text_password.encode(), salt)
 
 def check_password(plain_text_password, hashed_password):
     # Check hashed password. Using bcrypt, the salt is saved into the hash itself
@@ -38,7 +41,6 @@ def generate_6_digit_token():
 # ----- User registarion API --------
 
 # list all users
-
 class ListAllUsersAPI(generics.ListAPIView):
     queryset = Users.objects.all()
     serializer_class = UserSerializer
@@ -51,34 +53,58 @@ class GetUserAPI(generics.RetrieveUpdateDestroyAPIView):
     queryset = Users.objects.all()
     serializer_class = UserSerializer
 
+    def patch(self, request):
+        
+        return Response(True)
+
+        # data = {
+        #     "firstname": user_first,
+        #     "lastname": user_last,
+        #     "email": user_email,
+        #     "password": user_pass,
+        #     "is_anon": True,
+        # }
 # ----- User Login API --------
 class AnonymousLoginAPI(APIView):
     def post(self, request):
         # print("Anonymous Post mathod!")
         time = request.data['time']
-        # print(time)
+        print("inside anon", time)
         user_email, user_pass, user_first, user_last = 'user'+str(time)+'@email.com', "Temp@123", "User", time
-        # print(user_email)
-        data = {"email": user_email, "password": user_pass}
+        print(user_email)
         user_obj = Users()
         user_obj.firstname = user_first
         user_obj.lastname = user_last
         user_obj.email = user_email
-        user_obj.password = user_pass
+        user_obj.password = str(get_hashed_password(user_pass))
         user_obj.is_anon = True
         user_obj.save()
-        # print(user_obj)
+        data = {"email": user_email, "password": user_pass}
+        print(user_obj)
         serializer = LoginSerializer(data=data)
         if serializer.is_valid():
-            # print("Serializer success mathod!", serializer.validated_data['user'])
+            # serializer.save()
+            print(serializer, "inside")
+            print("Serializer success mathod!", serializer.validated_data['user'])
             user = serializer.validated_data['user']
             token = RefreshToken.for_user(user)
             token.payload['superuser'] = user.is_superuser
             token.payload['anon_user'] = user.is_anon
+            userObj = UserSerializer(user)
+            print(userObj.data['firstname'])
+            user_data = {
+                "id": userObj.data['id'],
+                "firstname": userObj.data['firstname'],
+                "lastname": userObj.data['lastname'],
+                "email": userObj.data['email'],
+                "is_anon": userObj.data['is_anon'],
+                "is_active": userObj.data['is_active'],
+                "is_superuser": userObj.data['is_superuser']
+            }
             data = {
                 'refresh': str(token),
                 'access': str(token.access_token),
-                'user': UserSerializer(user).data
+                'user': user_data
             }
             # print(data)
             return Response(data, status=status.HTTP_200_OK)
@@ -149,7 +175,7 @@ class forgotPassword(APIView):
                 print("data is saved")
                 email_token(email, token)
                 print(email, token)
-                return Response({"token_sent": True}, status=status.HTTP_201_CREATED)
+                return Response({"token_sent": True, "id": if_email_exists[0].id}, status=status.HTTP_201_CREATED)
         return Response({"token_sent":False})
 
 
