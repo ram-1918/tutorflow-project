@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import generics
 from .models import TutorflowModel, AnswersModel, Users, ForgotPassword, Favorites, likes, Feedbacks
 from .serializers import TutorSerializer, AnswerSerializer, AnswerSerializer_RO, UserSerializer, FGPassSerializer
-from .serializers import LoginSerializer, LikeSerializer, FavoriteSerializer, FavoriteSerializerReadOnly, FeedbackSerializer
+from .serializers import LoginSerializer, LikeSerializer, UserSerializerForPatch, FavoriteSerializer, FavoriteSerializerReadOnly, FeedbackSerializer
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import filters, status
@@ -51,11 +51,7 @@ class ListUsersAPI(generics.CreateAPIView):
 
 class GetUserAPI(generics.RetrieveUpdateDestroyAPIView):
     queryset = Users.objects.all()
-    serializer_class = UserSerializer
-
-    def patch(self, request):
-        
-        return Response(True)
+    serializer_class = UserSerializerForPatch
 
         # data = {
         #     "firstname": user_first,
@@ -69,9 +65,7 @@ class AnonymousLoginAPI(APIView):
     def post(self, request):
         # print("Anonymous Post mathod!")
         time = request.data['time']
-        print("inside anon", time)
         user_email, user_pass, user_first, user_last = 'user'+str(time)+'@email.com', "Temp@123", "User", time
-        print(user_email)
         user_obj = Users()
         user_obj.firstname = user_first
         user_obj.lastname = user_last
@@ -80,18 +74,15 @@ class AnonymousLoginAPI(APIView):
         user_obj.is_anon = True
         user_obj.save()
         data = {"email": user_email, "password": user_pass}
-        print(user_obj)
         serializer = LoginSerializer(data=data)
         if serializer.is_valid():
             # serializer.save()
-            print(serializer, "inside")
-            print("Serializer success mathod!", serializer.validated_data['user'])
+            # print("Serializer success mathod!", serializer.validated_data['user'])
             user = serializer.validated_data['user']
             token = RefreshToken.for_user(user)
             token.payload['superuser'] = user.is_superuser
             token.payload['anon_user'] = user.is_anon
             userObj = UserSerializer(user)
-            print(userObj.data['firstname'])
             user_data = {
                 "id": userObj.data['id'],
                 "firstname": userObj.data['firstname'],
@@ -117,13 +108,10 @@ class LoginAPI(APIView):
         if serializer.is_valid():
             # print("Serializer success mathod!", serializer.validated_data['user'])
             user = serializer.validated_data['user']
-            print("inside view", user)
             token = RefreshToken.for_user(user)
             token.payload['superuser'] = user.is_superuser
             token.payload['anon_user'] = False
-            print(token)
             userObj = UserSerializer(user)
-            print(userObj.data['firstname'])
             user_data = {
                 "id": userObj.data['id'],
                 "firstname": userObj.data['firstname'],
@@ -155,7 +143,6 @@ class forgotPassword(APIView):
     def get(self, request):
         records = ForgotPassword.objects.all()
         serializer = FGPassSerializer(records, many=True)
-        print(records, serializer)
         return Response(serializer.data)
     
     def post(self, request):
@@ -168,13 +155,10 @@ class forgotPassword(APIView):
                 "token": token,
                 "status": False
             }
-            print("token created")
             serializer = FGPassSerializer(data=info)
             if serializer.is_valid():
                 serializer.save()
-                print("data is saved")
                 email_token(email, token)
-                print(email, token)
                 return Response({"token_sent": True, "id": if_email_exists[0].id}, status=status.HTTP_201_CREATED)
         return Response({"token_sent":False})
 

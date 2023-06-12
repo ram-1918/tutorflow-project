@@ -123,26 +123,26 @@ WSGI_APPLICATION = 'tutorflow.wsgi.application'
 #     }
 # }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'tutordb',
-#         'USER': 'tutor',
-#         'PASSWORD': 'tutor123',
-#         'HOST': 'localhost',
-#     }
-# }
-
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "tutorflow",
-        "USER": "postgres",
-        "PASSWORD": "Prcjproject123",
-        "HOST":"127.0.0.1",
-        "PORT":"5434"
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'tutordb',
+        'USER': 'tutor',
+        'PASSWORD': 'tutor123',
+        'HOST': 'localhost',
     }
 }
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql_psycopg2",
+#         "NAME": "tutorflow",
+#         "USER": "postgres",
+#         "PASSWORD": "Prcjproject123",
+#         "HOST":"127.0.0.1",
+#         "PORT":"5434"
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

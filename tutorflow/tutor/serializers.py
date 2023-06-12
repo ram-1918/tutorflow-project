@@ -22,9 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'firstname', 'lastname', 'email', 'password','is_anon', 'is_active', 'is_superuser']
     
     def validate_password(self, value):
-        print("Plain: ", value)
         hpass = get_hashed_password(value)
-        print("Hased: ", hpass)
         return hpass
                 
     def validate_email(self, value):
@@ -32,7 +30,16 @@ class UserSerializer(serializers.ModelSerializer):
         if Users.objects.filter(email=email):
             raise serializers.ValidationError("Email address already exists!!!")
         return email
+
+class UserSerializerForPatch(serializers.ModelSerializer):
+    class Meta:
+        model = Users
+        fields = '__all__'
     
+    def validate_password(self, value):
+        hpass = get_hashed_password(value)
+        return hpass
+
 class LoginSerializer(serializers.Serializer):
     email = serializers.CharField(
         label="email",
@@ -48,17 +55,13 @@ class LoginSerializer(serializers.Serializer):
     def validate(self, request):
         email = request.get('email')
         enteredpassword = request.get('password')
-        print(email, enteredpassword, '1')
         if email and enteredpassword:
             user = Users.objects.filter(email = email).first()
-            print(email, enteredpassword, user, 2)
             if user:
                 password = user.password
-                print(email, enteredpassword, password, 3)
                 # print(check_password("ram", password), 4)
                 if check_password(enteredpassword, password):
                     request['user'] = user
-                    print(email, enteredpassword, request, 4)
                     return request
                 else:
                     msg = 'Password Mismatch'
