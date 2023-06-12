@@ -23,6 +23,7 @@ class UserSerializer(serializers.ModelSerializer):
     
     def validate_password(self, value):
         hpass = get_hashed_password(value)
+        print("hapss : ", hpass)
         return hpass
                 
     def validate_email(self, value):

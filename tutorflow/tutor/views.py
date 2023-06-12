@@ -63,7 +63,7 @@ class GetUserAPI(generics.RetrieveUpdateDestroyAPIView):
 # ----- User Login API --------
 class AnonymousLoginAPI(APIView):
     def post(self, request):
-        # print("Anonymous Post mathod!")
+        print("Anonymous Post mathod!")
         time = request.data['time']
         user_email, user_pass, user_first, user_last = 'user'+str(time)+'@email.com', "Temp@123", "User", time
         user_obj = Users()
@@ -77,7 +77,7 @@ class AnonymousLoginAPI(APIView):
         serializer = LoginSerializer(data=data)
         if serializer.is_valid():
             # serializer.save()
-            # print("Serializer success mathod!", serializer.validated_data['user'])
+            print("Serializer success mathod!", serializer.validated_data['user'])
             user = serializer.validated_data['user']
             token = RefreshToken.for_user(user)
             token.payload['superuser'] = user.is_superuser
@@ -106,7 +106,7 @@ class LoginAPI(APIView):
         # print("Post mathod!")
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
-            # print("Serializer success mathod!", serializer.validated_data['user'])
+            print("Serializer success mathod!", serializer.validated_data['user'])
             user = serializer.validated_data['user']
             token = RefreshToken.for_user(user)
             token.payload['superuser'] = user.is_superuser

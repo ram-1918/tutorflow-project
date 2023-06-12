@@ -1,6 +1,7 @@
 # Virtual Environment
 venv/
 env/
+gunicorn.conf.py
 
 # IDE/Editor-specific
 .vscode/
