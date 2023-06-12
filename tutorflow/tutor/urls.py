@@ -1,7 +1,7 @@
 from django.urls import path, re_path
-from .views import ListUsersAPI, ListAllUsersAPI, GetUserAPI, LoginAPI, AnonymousLoginAPI, CreatePost, UpdatePost, ListAnswersAPI, GetAnswersAPI, ListAnswersAPI_RO
-from .views import ListFavoritesAPI, GetFavoritesAPI, ListFavoritesAPI_RO, GetFavoritesAPI_RO, FeedbackAPI, LikesAPI, GetLikesAPI, FeedbackDeleteAPI
-
+from .views import ListUsersAPI, ListAllUsersAPI, GetUserAPI, LoginAPI, AnonymousLoginAPI, forgotPassword, forgotPasswordPK, verifyToken
+from .views import CreatePost, UpdatePost, ListAnswersAPI, GetAnswersAPI, ListAnswersAPI_RO, ListFavoritesAPI
+from .views import GetFavoritesAPI, ListFavoritesAPI_RO, GetFavoritesAPI_RO, FeedbackAPI, LikesAPI, GetLikesAPI, FeedbackDeleteAPI
 
 urlpatterns = [
     path("users/", ListAllUsersAPI.as_view()),
@@ -9,6 +9,9 @@ urlpatterns = [
     path("user/<int:pk>", GetUserAPI.as_view()),
     path("login/", LoginAPI.as_view()),
     path("anon-login/", AnonymousLoginAPI.as_view()),
+    path("forgot-password/", forgotPassword.as_view()),
+    path("forgot-password/<int:pk>", forgotPasswordPK.as_view()),
+    path("verify-fp/", verifyToken.as_view()),
 
     path("", CreatePost.as_view(), name="create-post"),
     path("tutor-list/", CreatePost.as_view()),

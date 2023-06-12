@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import TutorflowModel, AnswersModel, Users, Favorites, likes, Feedbacks
+from .models import TutorflowModel, AnswersModel, Users, ForgotPassword, Favorites, likes, Feedbacks
 from .models import Users
 
 from .services import send_email_verification
@@ -9,20 +9,22 @@ import bcrypt
 import re
 
 def get_hashed_password(plain_text_password):
-    return bcrypt.hashpw(plain_text_password, bcrypt.gensalt(12))
+    salt = bcrypt.gensalt(12)
+    return bcrypt.hashpw(plain_text_password.encode(), salt)
 
-def check_password(plain_text_password, hashed_password):
-    return bcrypt.checkpw(plain_text_password, hashed_password)
+def check_password(plain_text_password, hash):
+    print("inside check")
+    return bcrypt.checkpw(plain_text_password, hash)
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Users
-        fields = ['id', 'firstname', 'lastname', 'email', 'is_anon', 'is_active', 'is_superuser']
+        fields = ['id', 'firstname', 'lastname', 'email', 'password','is_anon', 'is_active', 'is_superuser']
     
     def validate_password(self, value):
-        # print("Plain: ", value)
+        print("Plain: ", value)
         hpass = get_hashed_password(value)
-        # print("Hased: ", hpass)
+        print("Hased: ", hpass)
         return hpass
                 
     def validate_email(self, value):
@@ -45,12 +47,23 @@ class LoginSerializer(serializers.Serializer):
 
     def validate(self, request):
         email = request.get('email')
-        password = request.get('password')
-        # print(email, password, '')
-
-        if email and password:
+        enteredpassword = request.get('password')
+        print(email, enteredpassword, '1')
+        if email and enteredpassword:
             user = Users.objects.filter(email = email).first()
-            if not user:
+            print(email, enteredpassword, user, 2)
+            if user:
+                password = user.password
+                print(email, enteredpassword, password, 3)
+                # print(check_password("ram", password), 4)
+                if check_password(enteredpassword, password):
+                    request['user'] = user
+                    print(email, enteredpassword, request, 4)
+                    return request
+                else:
+                    msg = 'Password Mismatch'
+                    raise serializers.ValidationError(msg, code='authorization')
+            else:
                 msg = 'Access denied: wrong username or password.'
                 raise serializers.ValidationError(msg, code='authorization')
             # print(email, password, user, '++++++++++++++++++++++__________________')
@@ -58,8 +71,12 @@ class LoginSerializer(serializers.Serializer):
         else:
             msg = 'Both "username" and "password" are required.'
             raise serializers.ValidationError(msg, code='authorization')
-        request['user'] = user
-        return request
+
+class FGPassSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ForgotPassword
+        fields = '__all__'
+
 
 class AnswerSerializer(serializers.ModelSerializer):
 

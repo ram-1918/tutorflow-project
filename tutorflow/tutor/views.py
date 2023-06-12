@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import generics
-from .models import TutorflowModel, AnswersModel, Users, Favorites, likes, Feedbacks
-from .serializers import TutorSerializer, AnswerSerializer, AnswerSerializer_RO, UserSerializer
+from .models import TutorflowModel, AnswersModel, Users, ForgotPassword, Favorites, likes, Feedbacks
+from .serializers import TutorSerializer, AnswerSerializer, AnswerSerializer_RO, UserSerializer, FGPassSerializer
 from .serializers import LoginSerializer, LikeSerializer, FavoriteSerializer, FavoriteSerializerReadOnly, FeedbackSerializer
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -12,7 +12,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from django.conf import settings
 
-from .services import send_email_verification
+from .services import send_email_verification, email_token
 
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -20,6 +20,7 @@ from rest_framework_simplejwt.exceptions import InvalidToken
 import jwt
 
 import bcrypt
+import secrets
 import json
 
 # Create your views here.
@@ -28,6 +29,12 @@ def check_password(plain_text_password, hashed_password):
     # Check hashed password. Using bcrypt, the salt is saved into the hash itself
     return bcrypt.checkpw(plain_text_password, hashed_password)
 
+def generate_6_digit_token():
+    choices = '0123456789'
+    token = ''
+    for i in range(6):
+        token += secrets.choice(choices)
+    return token
 # ----- User registarion API --------
 
 # list all users
@@ -84,17 +91,86 @@ class LoginAPI(APIView):
         if serializer.is_valid():
             # print("Serializer success mathod!", serializer.validated_data['user'])
             user = serializer.validated_data['user']
+            print("inside view", user)
             token = RefreshToken.for_user(user)
             token.payload['superuser'] = user.is_superuser
             token.payload['anon_user'] = False
+            print(token)
+            userObj = UserSerializer(user)
+            print(userObj.data['firstname'])
+            user_data = {
+                "id": userObj.data['id'],
+                "firstname": userObj.data['firstname'],
+                "lastname": userObj.data['lastname'],
+                "email": userObj.data['email'],
+                "is_anon": userObj.data['is_anon'],
+                "is_active": userObj.data['is_active'],
+                "is_superuser": userObj.data['is_superuser']
+            }
             data = {
                 'refresh': str(token),
                 'access': str(token.access_token),
-                'user': UserSerializer(user).data
+                'user': user_data
             }
             # print(data)
             return Response(data, status=status.HTTP_200_OK)
         return Response(False, status=status.HTTP_401_UNAUTHORIZED)
+    
+class forgotPassword(APIView):
+    '''
+    1. verify posted email with existing users
+    2. if verified, generate a token and save it in DB
+    3. mail that token/code to the user
+    4. when user enters the code, retrieve the code from the DB and verify it
+    5. if yes, Let him reset the password
+    6. else, raise error
+    7. resetting - updating password in the user details
+    '''
+    def get(self, request):
+        records = ForgotPassword.objects.all()
+        serializer = FGPassSerializer(records, many=True)
+        print(records, serializer)
+        return Response(serializer.data)
+    
+    def post(self, request):
+        email = request.data['email']
+        if_email_exists = Users.objects.filter(email = email)
+        if if_email_exists:
+            token = generate_6_digit_token()
+            info = {
+                "email": email,
+                "token": token,
+                "status": False
+            }
+            print("token created")
+            serializer = FGPassSerializer(data=info)
+            if serializer.is_valid():
+                serializer.save()
+                print("data is saved")
+                email_token(email, token)
+                print(email, token)
+                return Response({"token_sent": True}, status=status.HTTP_201_CREATED)
+        return Response({"token_sent":False})
+
+
+class forgotPasswordPK(generics.RetrieveUpdateDestroyAPIView):
+    queryset = ForgotPassword.objects.all()
+    serializer_class = FGPassSerializer
+
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+
+class verifyToken(APIView):
+    def post(self, request):
+        email = request.data['email']
+        token = request.data['token']
+        try: record = ForgotPassword.objects.filter(email=email, status=False).first()
+        except: return Response({"verified":False})
+        if record.token == token:
+            record.status = True
+            record.save()
+            return Response({"verified": True})
+        return Response({"verified":False})
 
 # ----- (Get, Post, Put, Delete, Update) Post(questions) API --------
 

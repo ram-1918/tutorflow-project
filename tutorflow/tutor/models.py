@@ -41,6 +41,17 @@ class Users(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name_plural = 'Users'
 
+class ForgotPassword(models.Model):
+    email = models.EmailField(max_length=255)
+    token = models.CharField(max_length=6, unique=True)
+    status = models.BooleanField(default=False)
+    date_created = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.email
+
+
+
 class TutorflowModel(models.Model):
     options = [('python', 'Python'),
                ('java', 'Java'),
