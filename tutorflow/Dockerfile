@@ -1,5 +1,11 @@
 FROM python:3.8
 
+RUN apt-get update && apt-get install -y \
+    python3-dev \
+    default-libmysqlclient-dev \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
 # RUN docker system df \
 #     && docker system prune --force
 
@@ -15,12 +21,13 @@ RUN python3 -m venv env \
 
 COPY . /backend/
 
-RUN python3 manage.py makemigrations \
-    && python3 manage.py migrate
+RUN python manage.py makemigrations \
+    && python manage.py migrate
 
 ENV DJANGO_SETTINGS_MODULE=tutorflow.settings
 EXPOSE 8000
 CMD ["gunicorn", "tutorflow.wsgi:application", "--bind", "0.0.0.0:8000"]
+
 
 
 # FROM python:3.8
