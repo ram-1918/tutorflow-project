@@ -1,7 +1,7 @@
 FROM python:3.8
 
-RUN docker system df \
-    && docker system prune --force
+# RUN docker system df \
+#     && docker system prune --force
 
 ENV PYTHONUNBUFFERED 1
 WORKDIR /backend
