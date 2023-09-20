@@ -59,7 +59,7 @@ class LoginSerializer(serializers.Serializer):
             user = TutorflowUsers.objects.filter(email = email).first()
             if user:
                 password = user.password
-                print(enteredpassword, user.set_password(enteredpassword)== user.password, 4)
+                # print(enteredpassword, user.set_password(enteredpassword)== user.password, 4)
                 # if check_password(enteredpassword, password):
                 if user.check_password(enteredpassword):
                     request['user'] = user
