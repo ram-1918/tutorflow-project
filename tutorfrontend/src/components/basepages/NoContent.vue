@@ -25,7 +25,7 @@ div{
 
 }
 .nothing{
-    background-color: rgb(225, 229, 232);
+    /* background-color: rgb(225, 229, 232); */
 }
 .title{
     font-size: larger;

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import generics
-from .models import TutorflowModel, AnswersModel, Users, ForgotPassword, Favorites, likes, Feedbacks
+from .models import TutorflowModel, AnswersModel, TutorflowUsers, ForgotPassword, Favorites, likes, Feedbacks
 from .serializers import TutorSerializer, AnswerSerializer, AnswerSerializer_RO, UserSerializer, FGPassSerializer
 from .serializers import LoginSerializer, LikeSerializer, UserSerializerForPatch, FavoriteSerializer, FavoriteSerializerReadOnly, FeedbackSerializer
 from rest_framework.authentication import BasicAuthentication
@@ -26,7 +26,7 @@ import json
 # Create your views here.
 def get_hashed_password(plain_text_password):
     salt = bcrypt.gensalt(12)
-    return bcrypt.hashpw(plain_text_password.encode(), salt)
+    return bcrypt.hashpw(plain_text_password, salt)
 
 def check_password(plain_text_password, hashed_password):
     # Check hashed password. Using bcrypt, the salt is saved into the hash itself
@@ -42,37 +42,46 @@ def generate_6_digit_token():
 
 # list all users
 class ListAllUsersAPI(generics.ListAPIView):
-    queryset = Users.objects.all()
+    queryset = TutorflowUsers.objects.all()
     serializer_class = UserSerializer
 
-class ListUsersAPI(generics.CreateAPIView):
-    queryset = Users.objects.all()
-    serializer_class = UserSerializer
+class ListUsersAPI(APIView):
+    '''
+    data = {
+            "firstname": user_first,
+            "lastname": user_last,
+            "email": user_email,
+            "password": user_pass,
+            "is_anon": True,
+        }
+    '''
+    def post(self, request):
+        print(request.data)
+        ser = UserSerializer(data=request.data)
+        ser.is_valid(raise_exception=True)
+        print(ser.data)
+        TutorflowUsers.objects.create_user(**ser.data)
+        return Response('Created', status=status.HTTP_201_CREATED)
 
 class GetUserAPI(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Users.objects.all()
+    queryset = TutorflowUsers.objects.all()
     serializer_class = UserSerializerForPatch
 
-        # data = {
-        #     "firstname": user_first,
-        #     "lastname": user_last,
-        #     "email": user_email,
-        #     "password": user_pass,
-        #     "is_anon": True,
-        # }
 # ----- User Login API --------
 class AnonymousLoginAPI(APIView):
     def post(self, request):
         print("Anonymous Post mathod!")
         time = request.data['time']
         user_email, user_pass, user_first, user_last = 'user'+str(time)+'@email.com', "Temp@123", "User", time
-        user_obj = Users()
-        user_obj.firstname = user_first
-        user_obj.lastname = user_last
-        user_obj.email = user_email
-        user_obj.password = str(get_hashed_password(user_pass))
-        user_obj.is_anon = True
-        user_obj.save()
+        user_obj = TutorflowUsers()
+        TutorflowUsers.objects.create_user(email=user_email, password=user_pass, firstname=user_first, lastname=user_last, is_anon=True)
+        # user_obj.firstname = user_first
+        # user_obj.lastname = user_last
+        # user_obj.email = user_email
+        # user_obj.password = user_pass
+        # user_obj.is_anon = True
+        # user_obj.save()
+        print("usersaved")
         data = {"email": user_email, "password": user_pass}
         serializer = LoginSerializer(data=data)
         if serializer.is_valid():
@@ -147,7 +156,7 @@ class forgotPassword(APIView):
     
     def post(self, request):
         email = request.data['email']
-        if_email_exists = Users.objects.filter(email = email)
+        if_email_exists = TutorflowUsers.objects.filter(email = email)
         if if_email_exists:
             token = generate_6_digit_token()
             info = {
@@ -272,7 +281,7 @@ class ListFavoritesAPI(APIView):
         user_id = payload.get('user_id', None)
         superuser = payload.get('superuser', False)
         if user_id and not superuser:
-            user = Users.objects.get(id=user_id)
+            user = TutorflowUsers.objects.get(id=user_id)
             favorites = Favorites.objects.filter(user=user)
             serializer = FavoriteSerializer(favorites, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -312,7 +321,7 @@ class ListFavoritesAPI_RO(APIView):
         user_id = payload.get('user_id', None)
         superuser = payload.get('superuser', False)
         if user_id and not superuser:
-            user = Users.objects.get(id=user_id)
+            user = TutorflowUsers.objects.get(id=user_id)
             favorites = Favorites.objects.filter(user=user)
         if user_id and superuser: favorites = Favorites.objects.all()
         serializer = FavoriteSerializerReadOnly(favorites, many=True)

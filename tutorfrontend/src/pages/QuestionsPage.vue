@@ -20,7 +20,7 @@
             ></questions-content>
         </table>
     </div>
-    <no-content v-else title="No Questions on this topic yet!" type="nothing"></no-content>
+    <no-content v-else title="No Questions yet!" type="nothing"></no-content>
     <!-- <span v-else class="no-content">No Questions Yet!</span> -->
 </template>
 <script>

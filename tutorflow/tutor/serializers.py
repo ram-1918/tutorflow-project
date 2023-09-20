@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from .models import TutorflowModel, AnswersModel, Users, ForgotPassword, Favorites, likes, Feedbacks
-from .models import Users
+from .models import TutorflowModel, AnswersModel, TutorflowUsers, ForgotPassword, Favorites, likes, Feedbacks
 
 from .services import send_email_verification
 
@@ -18,23 +17,23 @@ def check_password(plain_text_password, hash):
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Users
+        model = TutorflowUsers
         fields = ['id', 'firstname', 'lastname', 'email', 'password','is_anon', 'is_active', 'is_superuser']
     
-    def validate_password(self, value):
-        hpass = get_hashed_password(value)
-        print("hapss : ", hpass)
-        return hpass
+    # def validate_password(self, value):
+    #     hpass = get_hashed_password(value)
+    #     print("hapss : ", hpass)
+    #     return hpass
                 
     def validate_email(self, value):
         email = value.strip().lower()
-        if Users.objects.filter(email=email):
+        if TutorflowUsers.objects.filter(email=email):
             raise serializers.ValidationError("Email address already exists!!!")
         return email
 
 class UserSerializerForPatch(serializers.ModelSerializer):
     class Meta:
-        model = Users
+        model = TutorflowUsers
         fields = '__all__'
     
     def validate_password(self, value):
@@ -57,11 +56,12 @@ class LoginSerializer(serializers.Serializer):
         email = request.get('email')
         enteredpassword = request.get('password')
         if email and enteredpassword:
-            user = Users.objects.filter(email = email).first()
+            user = TutorflowUsers.objects.filter(email = email).first()
             if user:
                 password = user.password
-                # print(check_password("ram", password), 4)
-                if check_password(enteredpassword, password):
+                print(enteredpassword, user.set_password(enteredpassword)== user.password, 4)
+                # if check_password(enteredpassword, password):
+                if user.check_password(enteredpassword):
                     request['user'] = user
                     return request
                 else:

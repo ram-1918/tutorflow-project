@@ -64,8 +64,7 @@ export default{
                             "firstname": this.firstname.trim().toLowerCase(),
                             "lastname": this.lastname.trim().toLowerCase(),
                             "email": this.email,
-                            "phone": this.phone.trim().toLowerCase(),
-                            "hpassword": this.psw1
+                            "password": this.psw1
                         }
                         this.$store.dispatch('register', {data:user_data})
                     }

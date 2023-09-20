@@ -19,11 +19,11 @@ const store = createStore({
     },
     state() {
         return {
-            API_URL1: 'https://tutorflow.info/tutor/', // Prod URL
+            // API_URL1: 'https://tutorflow.info/tutor/', // Prod URL
             // API_URL1: 'http://18.224.55.89:8000/api/', // development URL
-            // API_URL1: 'http://127.0.0.1:8000/api/', // development URL
+            API_URL1: 'http://127.0.0.1:8001/api/', // development URL
             // API_URL: 'http://tutorapi.com:8000/api/tutor-list/', // Production URL
-            authorization: {auth: {username:'rbhaviri@buffalo.edu', password:'Qwerty123'}},
+            authorization: {auth: {username:'root@gmail.com', password:'root'}},
             currUser: localStorage.getItem('user') ? {'isLoggedIn':true, 'data':JSON.parse(localStorage.getItem('user'))}:{'isLoggedIn':false, 'data':null},
 
             data: [],

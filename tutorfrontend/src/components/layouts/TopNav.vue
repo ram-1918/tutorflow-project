@@ -65,10 +65,10 @@
                 </div>
             </div>
 
-            <div class="theme-buttons">  
+            <!-- <div class="theme-buttons">  
                 <button  @click = "toggleTheme()" class="light" :class="{'light-theme-toggle':this.$store.state.theme===false}"><i class="fa fa-sun-o" style="font-size:12px"></i></button>
                 <button  @click = "toggleTheme()" class="dark" :class="{'dark-theme-toggle': this.$store.state.theme}"><i class="fa fa-moon-o" style="font-size:12px"></i></button>
-            </div>
+            </div> -->
 
             <div class="session dropdown" v-if="user.data && !user.data.user.is_anon" style="float:right">
                 <i class="fa fa-user-circle-o dropbtn" style="font-size: 26px;"></i>

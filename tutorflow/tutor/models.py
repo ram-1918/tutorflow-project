@@ -1,13 +1,19 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+import bcrypt
 
 # Create your models here.
+
+def get_hashed_password(plain_text_password):
+    salt = bcrypt.gensalt(12)
+    return bcrypt.hashpw(plain_text_password, salt)
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
             raise ValueError('The Email field must be set')
         email = self.normalize_email(email)
+        # password = get_hashed_password(password)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save()
@@ -41,6 +47,28 @@ class Users(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name_plural = 'Users'
 
+class TutorflowUsers(AbstractBaseUser):
+    firstname = models.CharField(max_length=255)
+    lastname = models.CharField(max_length=255)
+    email = models.EmailField(max_length=255, unique=True)
+    password = models.CharField(max_length=255)
+    last_login = models.DateTimeField(auto_now=True)
+    is_anon = models.BooleanField(default=False) # Is_anon - True initially, once loggedin - is_anon = False and replace the old token with the new one afterlogged in 
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
+
+    objects = UserManager()
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['firstname', 'lastname']
+
+    def __str__(self):
+        return self.email
+    
+    class Meta:
+        verbose_name_plural = 'TF_Users'
+
 class ForgotPassword(models.Model):
     email = models.EmailField(max_length=255)
     token = models.CharField(max_length=6, unique=True)
@@ -64,7 +92,7 @@ class TutorflowModel(models.Model):
                ('ds', 'Data Science'),
                ('others', 'Others')]
     question = models.TextField(db_index=True)
-    user = models.ForeignKey(Users, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(TutorflowUsers, on_delete=models.SET_NULL, null=True)
     date_create = models.DateTimeField(auto_now = True)
     category = models.CharField(max_length = 255, choices=options, blank = True)
     student = models.CharField(max_length = 255, blank = True)
@@ -78,7 +106,7 @@ class TutorflowModel(models.Model):
 
 class AnswersModel(models.Model):
     question_id = models.ForeignKey(TutorflowModel, on_delete=models.CASCADE, related_name="answers", null=True)
-    user = models.ForeignKey(Users, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(TutorflowUsers, on_delete=models.SET_NULL, null=True)
     answer = models.TextField(blank=True)
     date_answered = models.DateTimeField(auto_now = True)
     topic = models.CharField(max_length = 255, blank = True)
@@ -91,7 +119,7 @@ class AnswersModel(models.Model):
         verbose_name_plural = 'AnswersModel'
 
 class likes(models.Model):
-    user = models.ForeignKey(Users, on_delete=models.CASCADE)
+    user = models.ForeignKey(TutorflowUsers, on_delete=models.CASCADE)
     answer = models.ForeignKey(AnswersModel, on_delete=models.CASCADE)
     status = models.IntegerField()
 
@@ -102,7 +130,7 @@ class likes(models.Model):
         verbose_name_plural = 'Favorites'
 
 class Favorites(models.Model):
-    user = models.ForeignKey(Users, on_delete=models.CASCADE)
+    user = models.ForeignKey(TutorflowUsers, on_delete=models.CASCADE)
     question = models.ForeignKey(TutorflowModel, on_delete=models.CASCADE)
 
 

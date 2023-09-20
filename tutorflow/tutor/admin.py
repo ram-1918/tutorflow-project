@@ -1,9 +1,9 @@
 from django.contrib import admin
-from .models import Users, AnswersModel, TutorflowModel, Favorites, Feedbacks
+from .models import TutorflowUsers, AnswersModel, TutorflowModel, Favorites, Feedbacks
 
 # Register your models here.
 
-admin.site.register(Users)
+admin.site.register(TutorflowUsers)
 admin.site.register(AnswersModel)
 admin.site.register(TutorflowModel)
 admin.site.register(Favorites)
