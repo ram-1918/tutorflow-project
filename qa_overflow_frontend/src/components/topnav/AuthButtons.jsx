@@ -2,9 +2,9 @@ import BaseButton from "../base/BaseButtons";
 
 export default function AuthButtons() {
     return (
-        <div className="flex flex-row space-x-3">
-            <BaseButton content="Login" bg="while" border="darkblue" text="blue" />
-            <BaseButton content="Register" bg="darkblue" border="blue" text="white" />
-        </div>
+        <>
+            <BaseButton content="Log in" bg="white" border="teal" text="teal" />
+            <BaseButton content="Sign up" bg="teal" border="teal" text="white" />
+        </>
     )
 }

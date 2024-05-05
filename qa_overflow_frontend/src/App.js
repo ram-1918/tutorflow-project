@@ -1,11 +1,7 @@
-import Topnav from "./components/topnav/Topnav";
+import AllRoutes from "./routing/AllRoutes";
 
 function App() {
-  return (
-    <div className="box-border h-screen bg-green-100 font-sans text-[0.9rem]">
-      <Topnav />
-    </div>
-  )
+  return <AllRoutes />
 }
 
 export default App;

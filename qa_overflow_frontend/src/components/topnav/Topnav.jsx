@@ -5,11 +5,11 @@ import Title from "./Title";
 const Topnav = () => {
     return (
         <header 
-        className="px-[10%] py-2 border-b-2 border-blue-300 flex flex-row justify-between items-center space-x-10">
-            <div className="bg-red-300">
+        className="px-[10%] py-2 border-b-2 border-teal-200 flex flex-row justify-between items-center space-x-10">
+            <div className="bg-white border border-teal-600 p-1 px-2 rounded-lg shadow-lg">
                 <Title />
             </div>
-            <div className="flex flex-row items-center justify-between space-x-10">
+            <div className="flex flex-row items-center justify-between space-x-2">
                 <SearchBar />
                 <AuthButtons />
             </div>

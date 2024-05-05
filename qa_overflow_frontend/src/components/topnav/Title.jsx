@@ -1,5 +1,9 @@
 export default function Title() {
     return (
-      <div>Q&A Overflow</div>
+      <div>
+        <span className="font-mono font-medium text-lg text-teal-600">
+          Q&A Overflow
+        </span>
+      </div>
     )
   }
